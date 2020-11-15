@@ -46,18 +46,18 @@ module MiniMIPS32_SYS(
     );      // input clk_in1
 
 /************************ÊµÀý»¯CPU*********************************/
-//    MiniMIPS32 minimips32 (
-//        .cpu_clk_50M(cpu_clk_50M),
-//        .cpu_rst_n(sys_rst_n),
-//        .iaddr(iaddr), 
-//        .ice(ice),
-//        .inst(inst),
-//        .dce(dce),
-//        .daddr(daddr),
-//        .we(we),
-//        .din(din),
-//        .dm(dout)
-//    );
+   MiniMIPS32 minimips32 (
+        .cpu_clk_50M(cpu_clk_50M),
+        .cpu_rst_n(sys_rst_n),
+        .iaddr(iaddr), 
+        .ice(ice),
+        .inst(inst),
+        .dce(dce),
+        .daddr(daddr),
+        .we(we),
+        .din(din),
+        .dm(dout)
+    );
 
 /************************SoCÐÞ¸Ä begin*******************************/
     dev_if dev_if0 (
