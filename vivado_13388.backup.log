@@ -1,0 +1,25 @@
+#-----------------------------------------------------------
+# Vivado v2017.3 (64-bit)
+# SW Build 2018833 on Wed Oct  4 19:58:22 MDT 2017
+# IP Build 2016188 on Wed Oct  4 21:52:56 MDT 2017
+# Start of session at: Thu Oct 22 20:48:00 2020
+# Process ID: 13388
+# Current directory: C:/Users/WJZ/Desktop/MiniMIPS32
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent3680 C:\Users\WJZ\Desktop\MiniMIPS32\MiniMIPS32.xpr
+# Log file: C:/Users/WJZ/Desktop/MiniMIPS32/vivado.log
+# Journal file: C:/Users/WJZ/Desktop/MiniMIPS32\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/WJZ/Desktop/MiniMIPS32/MiniMIPS32.xpr
+INFO: [Project 1-313] Project file moved from 'C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32' since last save.
+Scanning sources...
+Finished scanning sources
+WARNING: [filemgmt 56-2] IP Output Repository Path: Could not find the directory 'C:/Users/WJZ/MiniMIPS32/MiniMIPS32.cache/ip', nor could it be found using path 'C:/Users/xzjqx/Desktop/Task/MiniMIPS32/MiniMIPS32.cache/ip'.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/Xilinx/Vivado/2017.3/data/ip'.
+WARNING: [IP_Flow 19-3664] IP 'data_ram' generated file not found 'c:/Users/WJZ/Desktop/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/data_ram/stats.txt'. Please regenerate to continue.
+open_project: Time (s): cpu = 00:00:22 ; elapsed = 00:00:14 . Memory (MB): peak = 804.594 ; gain = 85.406
+update_compile_order -fileset sources_1
+exit
+INFO: [Common 17-206] Exiting Vivado at Thu Oct 22 20:49:23 2020...
