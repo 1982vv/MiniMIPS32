@@ -19,10 +19,12 @@ module MiniMIPS32(
     
     //连接取指阶段与取指/译码寄存器的信号
     wire [`WORD_BUS      ] pc;
+    wire [`INST_ADDR_BUS]   pc_plus_4;
 
     // 连接IF/ID模块与译码阶段ID模块的变量 
     wire [`WORD_BUS      ] id_pc_i;
-    
+    wire [`INST_ADDR_BUS]   id_pc_plus_4;
+      
     // 连接译码阶段ID模块与通用寄存器Regfile模块的变量 
     wire 				   re1;
     wire [`REG_ADDR_BUS  ] ra1;
@@ -41,6 +43,11 @@ module MiniMIPS32(
     wire                    id_whilo_o;
     wire                    id_mreg_o;
     wire [`REG_BUS       ] id_din_o;
+    wire [`INST_ADDR_BUS]    jump_addr_1;
+    wire [`INST_ADDR_BUS]    jump_addr_2;
+    wire [`INST_ADDR_BUS]    jump_addr_3;
+    wire [`JTSEL_BUS    ]    jtsel;
+    wire [`INST_ADDR_BUS]    ret_addr;
     
     //连接译码/执行寄存器与执行阶段的信号
     wire [`ALUOP_BUS     ] exe_aluop_i;
@@ -52,6 +59,7 @@ module MiniMIPS32(
     wire                   exe_whilo_i;
     wire                   exe_mreg_i;
     wire [`REG_BUS       ] exe_din_i;
+    wire [`REG_BUS       ] exe_ret_addr;
 
     //连接执行阶段与HILO寄存器的信号
     wire [`REG_BUS 	     ] exe_hi_i;
@@ -108,11 +116,15 @@ module MiniMIPS32(
     
     if_stage if_stage0(
         .cpu_clk_50M(cpu_clk_50M), .cpu_rst_n(cpu_rst_n),
-        .pc(pc), .ice(ice), .iaddr(iaddr));
+        .pc(pc), .ice(ice), .iaddr(iaddr),.jump_addr_1(jump_addr_1),
+        .jump_addr_2(jump_addr_2),.jump_addr_3(jump_addr_3),
+        .jtsel(jtsel),.pc_plus_4(pc_plus_4)
+        );
     
     ifid_reg ifid_reg0(
         .cpu_clk_50M(cpu_clk_50M), .cpu_rst_n(cpu_rst_n),
-        .if_pc(pc), .id_pc(id_pc_i)
+        .if_pc(pc), .id_pc(id_pc_i),.if_pc_plus(pc_plus_4),
+        .id_pc_plus_4(id_pc_plus_4)
     );
 
     id_stage id_stage0(
@@ -128,7 +140,10 @@ module MiniMIPS32(
         .id_mreg_o(id_mreg_o),.id_din_o(id_din_o),
         .exe2id_wreg(exe_wreg_o),.exe2id_wa(exe_wa_o),
         .exe2id_wd(exe_wd_o),.mem2id_wreg(mem_wreg_o),
-        .mem2id_wa(mem_wa_o),.mem2id_wd(mem_dreg_o)
+        .mem2id_wa(mem_wa_o),.mem2id_wd(mem_dreg_o),
+        .pc_plus_4(id_pc_plus_4),.ret_addr(ret_addr),
+        .jump_addr_1(jump_addr_1),.jump_addr_2(jump_addr_2),
+        .jump_addr_3(jump_addr_3),.jtsel(jtsel)
     );
     
     regfile regfile0(
@@ -147,7 +162,8 @@ module MiniMIPS32(
         .exe_alutype(exe_alutype_i), .exe_aluop(exe_aluop_i),
         .exe_src1(exe_src1_i), .exe_src2(exe_src2_i), 
         .exe_wa(exe_wa_i), .exe_wreg(exe_wreg_i),.exe_whilo(exe_whilo_i),
-        .exe_mreg(exe_mreg_i),.exe_din(exe_din_i)
+        .exe_mreg(exe_mreg_i),.exe_din(exe_din_i),
+        .id_ret_addr(ret_addr),.exe_ret_addr(exe_ret_addr)
     );
     
     exe_stage exe_stage0(.cpu_rst_n(cpu_rst_n),
@@ -161,7 +177,8 @@ module MiniMIPS32(
         .exe_mreg_o(exe_mreg_o),.exe_din_o(exe_din_o),
         .exe_whilo_o(exe_whilo_o),.exe_hilo_o(exe_hilo_o),
         .mem2exe_whilo(mem_whilo_o),.mem2exe_hilo(mem_hilo_o),
-        .wb2exe_whilo(wb_whilo_o),.wb2exe_hilo(wb_hilo_o)
+        .wb2exe_whilo(wb_whilo_o),.wb2exe_hilo(wb_hilo_o),
+        .ret_addr(exe_ret_addr)
     );
         
     exemem_reg exemem_reg0(
