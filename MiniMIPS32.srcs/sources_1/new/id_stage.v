@@ -115,17 +115,28 @@ module id_stage(
     wire inst_jr = inst_reg &~func[5]& ~func[4]& func[3]& ~func[2]& ~func[1]& ~func[0];
     wire inst_beq = ~op[5]& ~op[4]& ~op[3]& op[2]& ~op[1]& ~op[0];
     wire inst_bne = ~op[5]& ~op[4]& ~op[3]& op[2]& ~op[1]& op[0];
+    
+    //12.14 增加7条转移指令
+    wire inst_jalr = inst_reg &~func[5]& ~func[4]& func[3]& ~func[2]& ~func[1]& func[0];
+    wire inst_bgez = ~op[5]& ~op[4]& ~op[3]& ~op[2]& ~op[1]& op[0]& ~id_inst[20]& id_inst[16];
+    wire inst_bgtz = ~op[5]& ~op[4]& ~op[3]& op[2]& op[1]& op[0];
+    wire inst_blez = ~op[5]& ~op[4]& ~op[3]& op[2]& op[1]& ~op[0];
+    wire inst_bltz = ~op[5]& ~op[4]& ~op[3]& ~op[2]& ~op[1]& op[0]& ~id_inst[20]& ~id_inst[16];
+    wire inst_bgezal = ~op[5]& ~op[4]& ~op[3]& ~op[2]& ~op[1]& op[0]& id_inst[20]& id_inst[16];
+    wire inst_bltzal = ~op[5]& ~op[4]& ~op[3]& ~op[2]& ~op[1]& op[0]& id_inst[20]& ~id_inst[16];
     /*------------------------------------------------------------------------------*/
     /*-------------------- 第二级译码逻辑：生成具体控制信号 --------------------*/
     // 操作类型alutype
     assign id_alutype_o[2] =(cpu_rst_n == `RST_ENABLE)? 1'b0: (inst_sll |inst_srl |inst_sra |inst_sllv |inst_srlv |inst_srav
-                            | inst_j | inst_jal | inst_jr | inst_beq | inst_bne);
+                            | inst_j | inst_jal | inst_jr | inst_beq | inst_bne | inst_jalr |inst_bgez | inst_bgtz | inst_blez
+                            | inst_bltz | inst_bgezal | inst_bltzal);
     assign id_alutype_o[1] =(cpu_rst_n == `RST_ENABLE)?1'b0:(inst_and | inst_mfhi | inst_mflo | inst_ori | inst_lui
                             | inst_or | inst_nor | inst_xor |  inst_andi | inst_xori);
     assign id_alutype_o[0] =(cpu_rst_n ==`RST_ENABLE)?1'b0: (inst_add | inst_subu | inst_slt | inst_mfhi | inst_mflo
                             | inst_addiu | inst_sltiu | inst_lb |inst_lw | inst_sb | inst_sw
                             | inst_addu | inst_sub | inst_sltu | inst_mthi | inst_mtlo | inst_andi | inst_slti | inst_lbu 
-                            | inst_lh | inst_lhu | inst_sh | inst_j | inst_jal | inst_jr | inst_beq | inst_bne);
+                            | inst_lh | inst_lhu | inst_sh | inst_j | inst_jal | inst_jr | inst_beq | inst_bne | inst_jalr |inst_bgez | inst_bgtz | inst_blez
+                            | inst_bltz | inst_bgezal | inst_bltzal);
     //内部操作码aluop
     assign id_aluop_o[7] =(cpu_rst_n ==`RST_ENABLE)? 1'b0: (inst_lb | inst_lw | inst_sb | inst_sw);
     assign id_aluop_o[6]=(cpu_rst_n ==`RST_ENABLE)? 1'b0:(inst_addu | inst_sub | inst_sltu | inst_or | inst_nor 
@@ -133,34 +144,39 @@ module id_stage(
                          |  inst_mthi | inst_mtlo | inst_addi | inst_slti | inst_andi | inst_xori | inst_lbu 
                          | inst_lh |inst_lhu | inst_sh);
     assign id_aluop_o[5] =(cpu_rst_n == `RST_ENABLE)? 1'b0: (inst_slt | inst_sltiu | inst_j | inst_jal 
-                            | inst_jr | inst_beq | inst_bne);
+                            | inst_jr | inst_beq | inst_bne | inst_jalr |inst_bgez | inst_bgtz | inst_blez
+                            | inst_bltz | inst_bgezal | inst_bltzal);
     assign id_aluop_o[4] =(cpu_rst_n ==`RST_ENABLE)? 1'b0:
      (inst_add | inst_subu | inst_and | inst_mult | inst_sll |
      inst_ori | inst_addiu | inst_lb | inst_lw | inst_sb | inst_sw
      | inst_andi | inst_xori | inst_lbu | inst_lh |inst_lhu | inst_sh
-     | inst_beq | inst_bne);
+     | inst_beq | inst_bne| inst_jalr |inst_bgez | inst_bgtz | inst_blez
+     | inst_bltz | inst_bgezal | inst_bltzal);
     assign id_aluop_o[3]=(cpu_rst_n==`RST_ENABLE)?1'b0:
      (inst_add | inst_subu | inst_and | inst_mfhi | inst_mflo |
      inst_ori | inst_addiu | inst_sb | inst_sw
      | inst_sllv | inst_srlv | inst_srav | inst_multu 
      |  inst_mthi | inst_mtlo | inst_j | inst_jal 
-     | inst_jr );
+     | inst_jr | inst_bltzal);
     assign id_aluop_o[2]=(cpu_rst_n==`RST_ENABLE)?1'b0:
      (inst_slt | inst_and | inst_mult | inst_mfhi | inst_mflo|
      inst_ori | inst_lui | inst_sltiu | inst_nor 
      | inst_xor | inst_srl| inst_sra |  inst_mthi | inst_mtlo
      | inst_addi | inst_slti |inst_lhu | inst_sh
-     | inst_j | inst_jal | inst_jr );
+     | inst_j | inst_jal | inst_jr | inst_bgtz | inst_blez
+     | inst_bltz | inst_bgezal);
      assign id_aluop_o[1] =(cpu_rst_n ==`RST_ENABLE)? 1'b0:
      (inst_subu | inst_slt | inst_sltiu | inst_lw | inst_sw
      | inst_sltu | inst_or | inst_srl| inst_sra | inst_srav | inst_multu
-     | inst_addi | inst_slti | inst_lbu | inst_lh | inst_jal);
+     | inst_addi | inst_slti | inst_lbu | inst_lh | inst_jal
+     | inst_jalr |inst_bgez | inst_bltz | inst_bgezal);
      assign id_aluop_o[0] =(cpu_rst_n ==`RST_ENABLE)?1'b0:
      (inst_subu | inst_mflo | inst_sll |
     inst_ori | inst_lui | inst_addiu | inst_sltiu
     | inst_sub | inst_or  | inst_xor | inst_sra | inst_srlv | inst_multu 
     | inst_mtlo  | inst_slti  | inst_xori 
-    | inst_lh | inst_sh | inst_jr | inst_bne);
+    | inst_lh | inst_sh | inst_jr | inst_bne
+    |inst_bgez | inst_blez | inst_bgezal);
 
 
     //写通用寄存器使能信号
@@ -170,7 +186,7 @@ module id_stage(
     |inst_addu | inst_sub | inst_sltu | inst_or | inst_nor 
     | inst_xor | inst_srl| inst_sra | inst_sllv | inst_srlv | inst_srav
     | inst_addi | inst_slti | inst_andi | inst_xori | inst_lbu 
-    | inst_lh |inst_lhu  | inst_jal);
+    | inst_lh |inst_lhu  | inst_jal |inst_jalr | inst_bgezal | inst_bltzal);
     //写HILO寄存器使能信号
     assign id_whilo_o =(cpu_rst_n == `RST_ENABLE)?1'b0:(inst_mult| inst_multu 
                              |  inst_mthi | inst_mtlo) ;
@@ -178,7 +194,13 @@ module id_stage(
     //生成相等使能信号
     wire equ =(cpu_rst_n == `RST_ENABLE)?1'b0:
                (inst_beq)?(id_src1_o == id_src2_o):
-               (inst_bne)?(id_src1_o != id_src2_o):1'b0;
+               (inst_bne)?(id_src1_o != id_src2_o):
+               (inst_bgez)?($signed(id_src1_o) >= 1'b0):
+               (inst_bgtz)?($signed(id_src1_o) > 1'b0):
+               (inst_blez)?($signed(id_src1_o) <= 1'b0):
+               (inst_bltz)?($signed(id_src1_o) < 1'b0):
+               (inst_bgezal)?($signed(id_src1_o) >= 1'b0):
+               (inst_bltzal)?($signed(id_src1_o) < 1'b0):1'b0;
     //移位使能指令
     wire shift =inst_sll| inst_srl| inst_sra ;
     //立即数使能信号
@@ -206,7 +228,8 @@ module id_stage(
                              | inst_addu | inst_sub | inst_sltu | inst_or | inst_nor 
                              | inst_xor | inst_sllv | inst_srlv | inst_srav | inst_multu 
                              |  inst_mthi | inst_mtlo| inst_addi | inst_slti | inst_andi | inst_xori | inst_lbu 
-                             | inst_lh |inst_lhu | inst_sh | inst_jr | inst_beq |inst_bne);
+                             | inst_lh |inst_lhu | inst_sh | inst_jr | inst_beq |inst_bne | inst_jalr |inst_bgez 
+                             | inst_bgtz | inst_blez | inst_bltz | inst_bgezal | inst_bltzal);
     //读通用寄存器堆读端口2使能信号
     assign rreg2=(cpu_rst_n==`RST_ENABLE)?1'b0:
                               (inst_add | inst_subu | inst_slt | inst_and | inst_mult | inst_sll | inst_sb | inst_sw
@@ -214,11 +237,13 @@ module id_stage(
                               | inst_xor | inst_srl| inst_sra | inst_sllv | inst_srlv | inst_srav | inst_multu |inst_sh
                               | inst_beq |inst_bne);
     //生成子程序调用信号
-    wire jal=inst_jal;
+    wire jal=inst_jal | inst_bgezal | inst_bltzal | inst_jalr;
     
     //生成转移地址选择信号
-    assign jtsel[1]=inst_jr | inst_beq & equ | inst_bne & equ;
-    assign jtsel[0]=inst_j | inst_jal | inst_beq & equ | inst_bne & equ;
+    assign jtsel[1]=inst_jr | inst_beq & equ | inst_bne & equ | inst_bgez& equ | inst_bgtz& equ | inst_blez& equ
+                    | inst_bltz& equ | inst_bgezal& equ | inst_bltzal& equ | inst_jalr;
+    assign jtsel[0]=inst_j | inst_jal | inst_beq & equ | inst_bne & equ| inst_bgez& equ | inst_bgtz& equ | inst_blez& equ
+                    | inst_bltz& equ | inst_bgezal& equ | inst_bltzal& equ;
     
     //产生源操作数选择信号
     wire [1:0] fwrd1 = (cpu_rst_n==`RST_ENABLE)? 2'b00:

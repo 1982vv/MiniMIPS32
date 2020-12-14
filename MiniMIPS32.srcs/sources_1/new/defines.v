@@ -89,8 +89,14 @@
 `define MINIMIPS32_BEQ             8'h30
 `define MINIMIPS32_BNE             8'h31
 
-
-
+//11.15 增加7条
+`define MINIMIPS32_JALR            8'h32
+`define MINIMIPS32_BGEZ            8'h33
+`define MINIMIPS32_BGTZ            8'h34
+`define MINIMIPS32_BLEZ            8'h35
+`define MINIMIPS32_BLTZ            8'h36
+`define MINIMIPS32_BGEZAL          8'h37
+`define MINIMIPS32_BLTZAL          8'h38
 
 /*------------------- 通用寄存器堆参数 -------------------*/
 `define REG_BUS         31: 0               // 寄存器数据宽度
