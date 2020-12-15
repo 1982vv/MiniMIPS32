@@ -49,7 +49,14 @@ module id_stage(
     output wire [`INST_ADDR_BUS]    jump_addr_2,
     output wire [`INST_ADDR_BUS]    jump_addr_3,
     output wire [`JTSEL_BUS    ]    jtsel,
-    output wire [`INST_ADDR_BUS]    ret_addr
+    output wire [`INST_ADDR_BUS]    ret_addr,
+    
+    //从执行阶段和访存阶段回传的存储器到寄存器使能信号
+    input wire                      exe2id_mreg,
+    input wire                      mem2id_mreg,
+    
+    //暂停请求信号
+    output wire                     stallreq_id
     );
     
     // 根据小端模式组织指令字
@@ -124,6 +131,10 @@ module id_stage(
     wire inst_bltz = ~op[5]& ~op[4]& ~op[3]& ~op[2]& ~op[1]& op[0]& ~id_inst[20]& ~id_inst[16];
     wire inst_bgezal = ~op[5]& ~op[4]& ~op[3]& ~op[2]& ~op[1]& op[0]& id_inst[20]& id_inst[16];
     wire inst_bltzal = ~op[5]& ~op[4]& ~op[3]& ~op[2]& ~op[1]& op[0]& id_inst[20]& ~id_inst[16];
+    
+    //12.14 增加两条除法指令
+    wire inst_div = inst_reg &~func[5]& func[4]& func[3]& ~func[2]& func[1]& ~func[0];
+    wire inst_divu = inst_reg &~func[5]& func[4]& func[3]& ~func[2]& func[1]& func[0];    
     /*------------------------------------------------------------------------------*/
     /*-------------------- 第二级译码逻辑：生成具体控制信号 --------------------*/
     // 操作类型alutype
@@ -151,7 +162,7 @@ module id_stage(
      inst_ori | inst_addiu | inst_lb | inst_lw | inst_sb | inst_sw
      | inst_andi | inst_xori | inst_lbu | inst_lh |inst_lhu | inst_sh
      | inst_beq | inst_bne| inst_jalr |inst_bgez | inst_bgtz | inst_blez
-     | inst_bltz | inst_bgezal | inst_bltzal);
+     | inst_bltz | inst_bgezal | inst_bltzal | inst_div | inst_divu);
     assign id_aluop_o[3]=(cpu_rst_n==`RST_ENABLE)?1'b0:
      (inst_add | inst_subu | inst_and | inst_mfhi | inst_mflo |
      inst_ori | inst_addiu | inst_sb | inst_sw
@@ -164,19 +175,19 @@ module id_stage(
      | inst_xor | inst_srl| inst_sra |  inst_mthi | inst_mtlo
      | inst_addi | inst_slti |inst_lhu | inst_sh
      | inst_j | inst_jal | inst_jr | inst_bgtz | inst_blez
-     | inst_bltz | inst_bgezal);
+     | inst_bltz | inst_bgezal| inst_div | inst_divu);
      assign id_aluop_o[1] =(cpu_rst_n ==`RST_ENABLE)? 1'b0:
      (inst_subu | inst_slt | inst_sltiu | inst_lw | inst_sw
      | inst_sltu | inst_or | inst_srl| inst_sra | inst_srav | inst_multu
      | inst_addi | inst_slti | inst_lbu | inst_lh | inst_jal
-     | inst_jalr |inst_bgez | inst_bltz | inst_bgezal);
+     | inst_jalr |inst_bgez | inst_bltz | inst_bgezal | inst_div | inst_divu);
      assign id_aluop_o[0] =(cpu_rst_n ==`RST_ENABLE)?1'b0:
      (inst_subu | inst_mflo | inst_sll |
     inst_ori | inst_lui | inst_addiu | inst_sltiu
     | inst_sub | inst_or  | inst_xor | inst_sra | inst_srlv | inst_multu 
     | inst_mtlo  | inst_slti  | inst_xori 
     | inst_lh | inst_sh | inst_jr | inst_bne
-    |inst_bgez | inst_blez | inst_bgezal);
+    |inst_bgez | inst_blez | inst_bgezal | inst_divu);
 
 
     //写通用寄存器使能信号
@@ -189,7 +200,7 @@ module id_stage(
     | inst_lh |inst_lhu  | inst_jal |inst_jalr | inst_bgezal | inst_bltzal);
     //写HILO寄存器使能信号
     assign id_whilo_o =(cpu_rst_n == `RST_ENABLE)?1'b0:(inst_mult| inst_multu 
-                             |  inst_mthi | inst_mtlo) ;
+                             |  inst_mthi | inst_mtlo | inst_div | inst_divu) ;
                              
     //生成相等使能信号
     wire equ =(cpu_rst_n == `RST_ENABLE)?1'b0:
@@ -229,13 +240,13 @@ module id_stage(
                              | inst_xor | inst_sllv | inst_srlv | inst_srav | inst_multu 
                              |  inst_mthi | inst_mtlo| inst_addi | inst_slti | inst_andi | inst_xori | inst_lbu 
                              | inst_lh |inst_lhu | inst_sh | inst_jr | inst_beq |inst_bne | inst_jalr |inst_bgez 
-                             | inst_bgtz | inst_blez | inst_bltz | inst_bgezal | inst_bltzal);
+                             | inst_bgtz | inst_blez | inst_bltz | inst_bgezal | inst_bltzal | inst_div | inst_divu);
     //读通用寄存器堆读端口2使能信号
     assign rreg2=(cpu_rst_n==`RST_ENABLE)?1'b0:
                               (inst_add | inst_subu | inst_slt | inst_and | inst_mult | inst_sll | inst_sb | inst_sw
                               | inst_addu | inst_sub | inst_sltu | inst_or | inst_nor 
                               | inst_xor | inst_srl| inst_sra | inst_sllv | inst_srlv | inst_srav | inst_multu |inst_sh
-                              | inst_beq |inst_bne);
+                              | inst_beq |inst_bne | inst_div | inst_divu);
     //生成子程序调用信号
     wire jal=inst_jal | inst_bgezal | inst_bltzal | inst_jalr;
     
@@ -296,4 +307,11 @@ module id_stage(
     //生成子程序调用的返回地址
     assign ret_addr =pc_plus_8;
     
+    assign stallreq_id = (cpu_rst_n==`RST_ENABLE)? `NOSTOP:
+                         (((exe2id_wreg == `WRITE_ENABLE && exe2id_wa == ra1 && rreg1 == `READ_ENABLE)||
+                         (exe2id_wreg == `WRITE_ENABLE && exe2id_wa == ra2 && rreg2 == `READ_ENABLE))&&
+                         (exe2id_mreg == 1'b1))?`STOP:
+                         (((mem2id_wreg == `WRITE_ENABLE && mem2id_wa == ra1 && rreg1 == `READ_ENABLE)||
+                         (mem2id_wreg == `WRITE_ENABLE && mem2id_wa == ra2 && rreg2 == `READ_ENABLE))&&
+                         (mem2id_mreg == 1'b1))?`STOP:`NOSTOP;                         
 endmodule

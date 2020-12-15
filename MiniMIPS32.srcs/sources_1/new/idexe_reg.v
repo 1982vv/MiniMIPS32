@@ -4,6 +4,7 @@ module idexe_reg (
     input  wire 				  cpu_clk_50M,
     input  wire 				  cpu_rst_n,
     
+    input wire [`STALL_BUS      ]   stall,                 
     //转移指令
     input wire [`REG_BUS        ]   id_ret_addr,
     output reg [`REG_BUS        ]   exe_ret_addr,
@@ -45,8 +46,20 @@ module idexe_reg (
             exe_whilo          <= `WRITE_DISABLE;
             exe_ret_addr       <= `ZERO_WORD;
         end
+        else if(stall[2]==`STOP && stall[3]==`NOSTOP) begin
+            exe_alutype 	   <= `NOP;
+            exe_aluop          <= `MINIMIPS32_SLL;
+            exe_src1           <= `ZERO_WORD;
+            exe_src2           <= `ZERO_WORD;
+            exe_wa             <= `REG_NOP;
+            exe_wreg           <= `WRITE_DISABLE;
+            exe_mreg           <= `FALSE_V;
+            exe_din            <= `ZERO_WORD;
+            exe_whilo          <= `WRITE_DISABLE;
+            exe_ret_addr       <= `ZERO_WORD;
+        end
         // 将来自译码阶段的信息寄存并送至执行阶段
-        else begin
+        else if(stall[2]==`NOSTOP) begin
             exe_alutype 	   <= id_alutype;
             exe_aluop 		   <= id_aluop;
             exe_src1 		   <= id_src1;

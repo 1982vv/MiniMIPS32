@@ -98,6 +98,10 @@
 `define MINIMIPS32_BGEZAL          8'h37
 `define MINIMIPS32_BLTZAL          8'h38
 
+//12.14 增加除法
+`define MINIMIPS32_DIV             8'h16
+`define MINIMIPS32_DIVU            8'h17
+
 /*------------------- 通用寄存器堆参数 -------------------*/
 `define REG_BUS         31: 0               // 寄存器数据宽度
 `define REG_ADDR_BUS    4 : 0               // 寄存器的地址宽度
