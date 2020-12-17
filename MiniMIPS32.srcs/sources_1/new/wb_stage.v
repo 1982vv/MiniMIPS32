@@ -20,9 +20,22 @@ module wb_stage(
 	output wire                   wb_wreg_o,
     output wire [`WORD_BUS      ] wb_wd_o,
 	output wire                   wb_whilo_o,
-    output wire [`DOUBLE_REG_BUS] wb_hilo_o
+    output wire [`DOUBLE_REG_BUS] wb_hilo_o,
+    
+    //异常处理
+    input wire                      cp0_we_i,
+    input wire [`REG_ADDR_BUS   ]   cp0_waddr_i,
+    input wire [`REG_BUS        ]   cp0_wdata_i,
+    
+    output wire                     cp0_we_o,
+    output wire [`REG_ADDR_BUS  ]   cp0_waddr_o,
+    output wire [`REG_BUS       ]   cp0_wdata_o
     );
-
+    
+    //异常处理
+    assign cp0_we_o = (cpu_rst_n == `RST_ENABLE) ?1'b0:cp0_we_i;
+    assign cp0_waddr_o = (cpu_rst_n == `RST_ENABLE) ? `ZERO_WORD : cp0_waddr_i;
+    assign cp0_wdata_o = (cpu_rst_n == `RST_ENABLE) ? `ZERO_WORD : cp0_wdata_i;
     //传至通用寄存器堆和HILO寄存器的信号
     assign wb_wa_o      = (cpu_rst_n == `RST_ENABLE) ? 5'b0 : wb_wa_i;
     assign wb_wreg_o    = (cpu_rst_n == `RST_ENABLE) ? 1'b0 : wb_wreg_i;

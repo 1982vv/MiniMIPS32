@@ -4,7 +4,7 @@ module ifid_reg (
 	input  wire 						cpu_clk_50M,
 	input  wire 						cpu_rst_n,
     
-    
+    input   wire                       flush, //流水线清空信号
     //收到的暂停信号
     input wire [`STALL_BUS ]           stall,
     
@@ -21,7 +21,7 @@ module ifid_reg (
 
 	always @(posedge cpu_clk_50M) begin
 	    // 复位的时候将送至译码阶段的信息清0
-		if (cpu_rst_n == `RST_ENABLE) begin
+		if (cpu_rst_n == `RST_ENABLE || flush) begin
 			id_pc 	<= `PC_INIT;
 			id_pc_plus_4 <= `ZERO_WORD;
 		end

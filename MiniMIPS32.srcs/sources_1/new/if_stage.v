@@ -4,6 +4,9 @@ module if_stage (
     input 	wire 					cpu_clk_50M,
     input 	wire 					cpu_rst_n,
     
+    input   wire                    flush,  //清空流水线信号
+    input   wire [`INST_ADDR_BUS]   cp0_excaddr,    //异常处理程序入口地址
+    
     input wire [`STALL_BUS]        stall,
     
     output  wire                     ice,
@@ -39,14 +42,18 @@ module if_stage (
 		end
 	end
 	
-	assign ice = (stall[1] == 1'b1)?1'b0:ce;
+	assign ice = (stall[1] == 1'b1 || flush)?1'b0:ce;
 	
 
     always @(posedge cpu_clk_50M) begin
         if (ce == `CHIP_DISABLE)
             pc <= `PC_INIT;                   // 指令存储器禁用的时候，PC保持初始值（MiniMIPS32中设置为0x00000000）
-        else if(stall[0] == `NOSTOP) begin
-            pc <= pc_next;                    // 指令存储器使能后，PC值每时钟周期加4 	
+        else begin
+            if(flush==1'b1)
+                pc <= cp0_excaddr;
+            else if(stall[0] == `NOSTOP) begin
+                pc <= pc_next;                    // 指令存储器使能后，PC值每时钟周期加4 	
+            end
         end
     end
     

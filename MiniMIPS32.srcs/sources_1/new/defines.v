@@ -39,6 +39,7 @@
 `define MOVE            3'b011
 `define SHIFT           3'b100
 `define JUMP            3'b101
+`define PRIVILEGE       3'b110
 
 // 内部操作码aluop
 `define MINIMIPS32_LUI             8'h05
@@ -102,6 +103,12 @@
 `define MINIMIPS32_DIV             8'h16
 `define MINIMIPS32_DIVU            8'h17
 
+//12.15 增加异常处理
+`define MINIMIPS32_SYSCALL         8'h86
+`define MINIMIPS32_ERET            8'h87
+`define MINIMIPS32_MFC0            8'h8C
+`define MINIMIPS32_MTC0            8'h8D
+
 /*------------------- 通用寄存器堆参数 -------------------*/
 `define REG_BUS         31: 0               // 寄存器数据宽度
 `define REG_ADDR_BUS    4 : 0               // 寄存器的地址宽度
@@ -126,7 +133,7 @@
 
 /************************异常处理 begin*******************************/
 /*------------------- CP0参数 -------------------*/
-`define CP0_INT_BUS         5 : 0           // 中断信号的宽度
+`define CP0_INT_BUS         7 : 0           // 中断信号的宽度
 `define CP0_BADVADDR        8               // BadVAddr寄存器地址（编号）
 `define CP0_STATUS          12              // Status寄存器地址（编号）
 `define CP0_CAUSE           13              // Cause寄存器地址（编号）

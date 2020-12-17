@@ -41,9 +41,38 @@ module exe_stage (
     
     //处理器时钟，用于除法计算
     input wire                      cpu_clk_50M,
-    output wire                     stallreq_exe
-   
+    output wire                     stallreq_exe,
+    
+    //异常处理
+    input wire [`REG_ADDR_BUS]      cp0_addr_i,
+    input wire [`REG_BUS]           cp0_data_i,
+    
+    input wire                      mem2exe_cp0_we,
+    input wire [`REG_ADDR_BUS]      mem2exe_cp0_wa,
+    input wire [`REG_BUS]           mem2exe_cp0_wd,
+    input wire                      wb2exe_cp0_we,
+    input wire [`REG_ADDR_BUS]      wb2exe_cp0_wa,
+    input wire [`REG_BUS]           wb2exe_cp0_wd,
+    
+    input wire [`INST_ADDR_BUS]     exe_pc_i,
+    input wire                      exe_in_delay_i,
+    input wire [`EXC_CODE_BUS]      exe_exccode_i,
+    
+    output wire                     cp0_re_o,
+    output wire [`REG_ADDR_BUS]     cp0_raddr_o,
+    output wire                     cp0_we_o,
+    output wire [`REG_ADDR_BUS]     cp0_waddr_o,
+    output wire [`REG_BUS]          cp0_wdata_o,
+
+    output wire [`INST_ADDR_BUS]     exe_pc_o,
+    output wire                      exe_in_delay_o,
+    output wire [`EXC_CODE_BUS]      exe_exccode_o  
+    
     );
+    
+    //异常处理
+    assign exe_pc_o =(cpu_rst_n == `RST_ENABLE) ?`PC_INIT:exe_pc_i;
+    assign exe_in_delay_o = (cpu_rst_n == `RST_ENABLE) ?1'b0:exe_in_delay_i;
 
     // 直接传到下一阶段
     assign exe_aluop_o = (cpu_rst_n == `RST_ENABLE) ? 8'b0 : exe_aluop_i;
@@ -66,7 +95,21 @@ module exe_stage (
     wire [`REG_BUS       ]      div_opdata2;
     wire                        div_start;
     reg                         div_ready;
+    //保存cp0的最新值
+    wire [`REG_BUS]             cp0_t;
     
+    assign cp0_we_o = (cpu_rst_n ==`RST_ENABLE)? 1'b0:
+                      (exe_aluop_i == `MINIMIPS32_MTC0)?1'b1:1'b0;
+    assign cp0_wdata_o = (cpu_rst_n ==`RST_ENABLE)? `ZERO_WORD:
+                      (exe_aluop_i == `MINIMIPS32_MTC0)?exe_src2_i :`ZERO_WORD;
+    assign cp0_waddr_o = (cpu_rst_n ==`RST_ENABLE)? `REG_NOP:cp0_addr_i;
+    assign cp0_raddr_o = (cpu_rst_n ==`RST_ENABLE)? `REG_NOP:cp0_addr_i;
+    assign cp0_re_o = (cpu_rst_n ==`RST_ENABLE)? 1'b0:
+                      (exe_aluop_i == `MINIMIPS32_MFC0)?1'b1:1'b0;  
+    assign cp0_t =(cp0_re_o != `READ_ENABLE)?`ZERO_WORD:
+                  (mem2exe_cp0_we == `WRITE_ENABLE && mem2exe_cp0_wa == cp0_raddr_o) ? mem2exe_cp0_wd:
+                  (wb2exe_cp0_we == `WRITE_ENABLE && wb2exe_cp0_wa == cp0_raddr_o)? wb2exe_cp0_wd:cp0_data_i;  
+                                      
     assign stallreq_exe =(cpu_rst_n ==`RST_ENABLE)? `NOSTOP:
                          ((exe_aluop_i==`MINIMIPS32_DIV) && (div_ready == `DIV_NOT_READY)) ?`STOP: 
                          ((exe_aluop_i==`MINIMIPS32_DIVU) && (div_ready == `DIV_NOT_READY)) ?`STOP:`NOSTOP;
@@ -239,7 +282,8 @@ module exe_stage (
      
      //11.6
      (exe_aluop_i== `MINIMIPS32_MFHI)? hi_t:
-     (exe_aluop_i== `MINIMIPS32_MFLO)? lo_t: `ZERO_WORD;
+     (exe_aluop_i== `MINIMIPS32_MFLO)? lo_t: 
+     (exe_aluop_i== `MINIMIPS32_MFC0)? cp0_t:`ZERO_WORD;
      
      //根据内部操作码 aluop进行算术运算
      assign arithres =(cpu_rst_n ==`RST_ENABLE)? `ZERO_WORD:
@@ -284,5 +328,11 @@ module exe_stage (
                       (exe_alutype_i == `MOVE    ) ? moveres  :
                       (exe_alutype_i == `JUMP    ) ? ret_addr  :
                       (exe_alutype_i == `ARITH    ) ? arithres  :`ZERO_WORD;
-
+    //判断溢出
+    wire [31:0] exe_src2_t = (exe_aluop_i == `MINIMIPS32_SUBU) ? (~exe_src2_i) +1:exe_src2_i;
+    wire [31:0] arith_tmp = exe_src1_i + exe_src2_t;
+    wire ov = ((!exe_src1_i[31] && !exe_src2_t[31] && arith_tmp[31]) || (exe_src1_i[31] && exe_src2_t[31] && !arith_tmp[31]));
+    
+    assign exe_exccode_o =(cpu_rst_n   == `RST_ENABLE) ? `EXC_NONE:
+                          ((exe_aluop_i == `MINIMIPS32_ADD) && (ov == 1'b1)) ? `EXC_OV :exe_exccode_i;
 endmodule

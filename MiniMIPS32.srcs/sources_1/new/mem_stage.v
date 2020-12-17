@@ -26,9 +26,48 @@ module mem_stage (
     output wire                         dce,
     output wire [`INST_ADDR_BUS     ]   daddr,
     output wire [`BSEL_BUS          ]   we,
-    output wire [`REG_BUS           ]   din
+    output wire [`REG_BUS           ]   din,
+    
+    //异常处理
+    input wire                          cp0_we_i,
+    input wire [`REG_ADDR_BUS       ]   cp0_waddr_i,
+    input wire [`REG_BUS            ]   cp0_wdata_i,
+    input wire                          wb2mem_cp0_we,
+    input wire [`REG_ADDR_BUS       ]   wb2mem_cp0_wa,
+    input wire [`REG_BUS            ]   wb2mem_cp0_wd,
+    
+    input wire [`INST_ADDR_BUS      ]   mem_pc_i,
+    input wire                          mem_in_delay_i,
+    input wire [`EXC_CODE_BUS       ]   mem_exccode_i,
+    
+    input wire [`WORD_BUS           ]   cp0_status,
+    input wire [`WORD_BUS           ]   cp0_cause,
+    
+    output wire                         cp0_we_o,
+    output wire [`REG_ADDR_BUS      ]   cp0_waddr_o,
+    output wire [`REG_BUS           ]   cp0_wdata_o,
+    
+    output wire [`INST_ADDR_BUS     ]   cp0_pc,
+    output wire                         cp0_in_delay,
+    output wire [`EXC_CODE_BUS      ]   cp0_exccode
     );
-
+    
+    // 直接送至写回阶段的信号
+    assign cp0_we_o = (cpu_rst_n == `RST_ENABLE) ? 1'b0:cp0_we_i;
+    assign cp0_waddr_o = (cpu_rst_n == `RST_ENABLE) ? `ZERO_WORD : cp0_waddr_i;
+    assign cp0_wdata_o = (cpu_rst_n == `RST_ENABLE) ? `ZERO_WORD : cp0_wdata_i;
+    
+    wire [`WORD_BUS]    status;
+    wire [`WORD_BUS]    cause;
+    
+    assign status = (wb2mem_cp0_we==`WRITE_ENABLE && wb2mem_cp0_wa == `CP0_STATUS) ? wb2mem_cp0_wd : cp0_status;
+    assign cause = (wb2mem_cp0_we == `WRITE_ENABLE && wb2mem_cp0_wa  == `CP0_STATUS) ? wb2mem_cp0_wd : cp0_cause;
+    
+    assign cp0_in_delay = (cpu_rst_n == `RST_ENABLE) ? 1'b0 : mem_in_delay_i;
+    assign cp0_exccode = (cpu_rst_n == `RST_ENABLE) ? `ZERO_WORD:
+                         ((status[15:10] & cause[15:10]) != 8'h00 && status[1] == 1'b0 && status[0] == 1'b1) ? `EXC_INT:
+                         mem_exccode_i;
+    assign cp0_pc = (cpu_rst_n == `RST_ENABLE) ? `PC_INIT : mem_pc_i;
     // 如果当前不是访存指令，则只需要把从执行阶段获得的信息直接输出
     assign mem_wa_o     = (cpu_rst_n == `RST_ENABLE) ? 5'b0  : mem_wa_i;
     assign mem_wreg_o   = (cpu_rst_n == `RST_ENABLE) ? 1'b0  : mem_wreg_i;
