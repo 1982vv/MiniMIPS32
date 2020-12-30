@@ -12,6 +12,7 @@ module memwb_reg (
     input  wire [`BSEL_BUS]          mem_dre,
     input  wire                      mem_whilo,
     input  wire [`DOUBLE_REG_BUS]    mem_hilo,
+    input  wire                     mem_unsign,
 
 	// 送至写回阶段的信息 
 	output reg  [`REG_ADDR_BUS  ]   wb_wa,
@@ -21,6 +22,7 @@ module memwb_reg (
 	output reg  [`BSEL_BUS      ]   wb_dre,
 	output reg                      wb_whilo,
 	output reg  [`DOUBLE_REG_BUS]   wb_hilo,
+	output reg                     wb_unsign,
 	
 	//异常处理
 	input wire                     mem_cp0_we,
@@ -47,6 +49,7 @@ module memwb_reg (
 			wb_cp0_we   <= 1'b0;
 			wb_cp0_waddr<= `ZERO_WORD;
 			wb_cp0_wdata<= `ZERO_WORD;
+			wb_unsign   <= 1'b0;
 		end
 		// 将来自访存阶段的信息寄存并送至写回阶段
 		else begin
@@ -60,6 +63,7 @@ module memwb_reg (
             wb_cp0_we   <= mem_cp0_we;
             wb_cp0_waddr<= mem_cp0_waddr;
             wb_cp0_wdata<= mem_cp0_wdata;
+            wb_unsign   <= mem_unsign;
 		end
 	end
 

@@ -21,6 +21,7 @@ module mem_stage (
     output wire [`BSEL_BUS      ]       dre,
     output wire                         mem_whilo_o,
     output wire [`DOUBLE_REG_BUS      ] mem_hilo_o,
+    output wire                         unsign,
     
     //送至数据存储器的信号
     output wire                         dce,
@@ -49,13 +50,11 @@ module mem_stage (
     
     output wire [`INST_ADDR_BUS     ]   cp0_pc,
     output wire                         cp0_in_delay,
-    output wire [`EXC_CODE_BUS      ]   cp0_exccode
+    output wire [`EXC_CODE_BUS      ]   cp0_exccode,
+    output wire [`REG_BUS           ]   cp0_eaddr
     );
     
-    // 直接送至写回阶段的信号
-    assign cp0_we_o = (cpu_rst_n == `RST_ENABLE) ? 1'b0:cp0_we_i;
-    assign cp0_waddr_o = (cpu_rst_n == `RST_ENABLE) ? `ZERO_WORD : cp0_waddr_i;
-    assign cp0_wdata_o = (cpu_rst_n == `RST_ENABLE) ? `ZERO_WORD : cp0_wdata_i;
+
     
     wire [`WORD_BUS]    status;
     wire [`WORD_BUS]    cause;
@@ -64,9 +63,7 @@ module mem_stage (
     assign cause = (wb2mem_cp0_we == `WRITE_ENABLE && wb2mem_cp0_wa  == `CP0_STATUS) ? wb2mem_cp0_wd : cp0_cause;
     
     assign cp0_in_delay = (cpu_rst_n == `RST_ENABLE) ? 1'b0 : mem_in_delay_i;
-    assign cp0_exccode = (cpu_rst_n == `RST_ENABLE) ? `ZERO_WORD:
-                         ((status[15:10] & cause[15:10]) != 8'h00 && status[1] == 1'b0 && status[0] == 1'b1) ? `EXC_INT:
-                         mem_exccode_i;
+
     assign cp0_pc = (cpu_rst_n == `RST_ENABLE) ? `PC_INIT : mem_pc_i;
     // 如果当前不是访存指令，则只需要把从执行阶段获得的信息直接输出
     assign mem_wa_o     = (cpu_rst_n == `RST_ENABLE) ? 5'b0  : mem_wa_i;
@@ -87,6 +84,28 @@ module mem_stage (
     wire inst_lhu =(mem_aluop_i == 8'h54);
     wire inst_sh =(mem_aluop_i == 8'h55);
     
+    assign cp0_exccode = (cpu_rst_n == `RST_ENABLE) ? `ZERO_WORD:
+                         ((status[15:10] & cause[15:10]) != 8'h00 && status[1] == 1'b0 && status[0] == 1'b1) ? `EXC_INT:
+                         (inst_lh & (mem_wd_i[0]==1))? `EXC_ADEL:
+                         (inst_lhu & (mem_wd_i[0]==1))? `EXC_ADEL:
+                         (inst_lw & (mem_wd_i[1:0]!=2'b00))? `EXC_ADEL:
+                         (inst_sh & (mem_wd_i[0]==1))? `EXC_ADES:
+                         (inst_sw & (mem_wd_i[1:0]!=2'b00))? `EXC_ADES:
+                         mem_exccode_i;
+
+    // 直接送至写回阶段的信号
+    assign cp0_we_o = (cpu_rst_n == `RST_ENABLE) ? 1'b0:cp0_we_i;
+    assign cp0_waddr_o = (cpu_rst_n == `RST_ENABLE) ? `ZERO_WORD : cp0_waddr_i;
+    assign cp0_wdata_o = (cpu_rst_n == `RST_ENABLE) ? `ZERO_WORD :cp0_wdata_i;
+    assign cp0_eaddr = (cpu_rst_n == `RST_ENABLE) ? `ZERO_WORD :
+                       (cp0_exccode == `EXC_ADES)?mem_wd_i:
+                       (inst_lh & (mem_wd_i[0]==1))? mem_wd_i:
+                       (inst_lhu & (mem_wd_i[0]==1))? mem_wd_i:
+                       (inst_lw & (mem_wd_i[1:0]!=2'b00))? mem_wd_i:
+                       cp0_wdata_i;
+    //无符号扩展
+    assign unsign = inst_lbu | inst_lhu;
+    
     //获得数据存储器的访问地址
     assign daddr = (cpu_rst_n == `RST_ENABLE)?`ZERO_WORD:mem_wd_i;
     
@@ -105,7 +124,7 @@ module mem_stage (
                     (inst_lh & (daddr[1:0]==2'b10)) | (inst_lhu & (daddr[1:0]==2'b10))); 
         
     //获得数据存储器使能信号
-    assign dce = (cpu_rst_n == `RST_ENABLE)?1'b0:
+    assign dce = (cpu_rst_n == `RST_ENABLE || cp0_exccode==`EXC_ADES)?1'b0:
                  (inst_lb | inst_lw | inst_sb | inst_sw | inst_lbu | inst_lh | inst_lhu | inst_sh);
     
     //获得数据存储器读字节使能信号
@@ -121,10 +140,13 @@ module mem_stage (
     //确定待写入数据存储器的数据
     wire [`WORD_BUS] din_reverse = {mem_din_i[7:0],mem_din_i[15:8],mem_din_i[23:16],mem_din_i[31:24]};
     wire [`WORD_BUS] din_byte = {mem_din_i[7:0],mem_din_i[7:0],mem_din_i[7:0],mem_din_i[7:0]};
+    wire [`WORD_BUS] din_bytes = {mem_din_i[7:0],mem_din_i[15:8],mem_din_i[7:0],mem_din_i[15:8]};
     assign din = (cpu_rst_n == `RST_ENABLE)?`ZERO_WORD:
                  (we == 4'b1111)?din_reverse:
                  (we == 4'b1000)?din_byte:
                  (we == 4'b0100)?din_byte:
                  (we == 4'b0010)?din_byte:
-                 (we == 4'b0001)?din_byte:`ZERO_WORD;
+                 (we == 4'b0001)?din_byte:
+                 (we == 4'b1100)?din_bytes:
+                 (we == 4'b0011)?din_bytes:`ZERO_WORD;
 endmodule

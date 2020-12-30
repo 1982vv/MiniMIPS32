@@ -1,4 +1,5 @@
 `timescale 1ns / 1ps
+`include "defines.v"
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -41,7 +42,9 @@ module cp0_reg(
     
     output wire [`REG_BUS     ] data_o,
     output wire [`REG_BUS     ] status_o,
-    output wire [`REG_BUS     ] cause_o
+    output wire [`REG_BUS     ] cause_o,
+    
+    input wire [`REG_BUS     ] eaddr
     
     );
     
@@ -70,13 +73,14 @@ module cp0_reg(
     begin
         if(status[1] == 0) begin
             if(in_delay_i) begin
-            cause[31] <=1;
-            epc       <=pc_i-4;
+                cause[31] <=1;
+                epc       <=pc_i-4;
             end else begin
                 cause[31] <=0;
                 epc       <=pc_i;
             end
         end
+        
         status[1] <=1'b1;
         cause[6:2] <= exccode_i;
     end
@@ -93,7 +97,7 @@ module cp0_reg(
                          (exccode_i == `EXC_INT) ? `EXC_INT_ADDR:
                          (exccode_i == `EXC_ERET && waddr == `CP0_EPC && we == `WRITE_ENABLE) ? wdata:
                          (exccode_i == `EXC_ERET ) ? epc:
-                         (exccode_i == `EXC_NONE ) ? `EXC_ADDR: `ZERO_WORD;
+                         (exccode_i != `EXC_NONE ) ? `EXC_ADDR: `ZERO_WORD;
                          
     //更新CP0寄存器数据
     always @(posedge cpu_clk_50M) begin
@@ -105,6 +109,9 @@ module cp0_reg(
         end
         else begin
             cause[15:10]<=int_i;
+            if(exccode_i == `EXC_ADEL || exccode_i == `EXC_ADES)begin
+               badvaddr <= eaddr;
+               end
             case(exccode_i)
                 `EXC_NONE:
                     if(we == `WRITE_ENABLE) begin
@@ -118,11 +125,11 @@ module cp0_reg(
                 `EXC_ERET:
                     do_eret();
                 default:
-                    do_exc();
+                 do_exc();
             endcase
         end
     end
-    
+                        
     //读CP0的寄存器
     assign data_o = (cpu_rst_n == `RST_ENABLE) ? `ZERO_WORD:
                     (re != `READ_ENABLE )? `ZERO_WORD:

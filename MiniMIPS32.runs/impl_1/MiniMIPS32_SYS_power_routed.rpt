@@ -1,8 +1,8 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2017.3 (win64) Build 2018833 Wed Oct  4 19:58:22 MDT 2017
-| Date             : Sat Jun 16 23:31:09 2018
-| Host             : LAPTOP-GDGGKCGC running 64-bit major release  (build 9200)
+| Date             : Wed Dec 30 17:28:31 2020
+| Host             : DESKTOP-LGQGIHC running 64-bit major release  (build 9200)
 | Command          : report_power -file MiniMIPS32_SYS_power_routed.rpt -pb MiniMIPS32_SYS_power_summary_routed.pb -rpx MiniMIPS32_SYS_power_routed.rpx
 | Design           : MiniMIPS32_SYS
 | Device           : xc7a100tcsg324-1
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.224        |
+| Total On-Chip Power (W)  | 0.216        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.125        |
+| Dynamic (W)              | 0.117        |
 | Device Static (W)        | 0.099        |
 | Effective TJA (C/W)      | 4.6          |
 | Max Ambient (C)          | 84.0         |
@@ -53,19 +53,19 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.005 |        8 |       --- |             --- |
-| Slice Logic    |     0.004 |     5690 |       --- |             --- |
-|   LUT as Logic |     0.004 |     2900 |     63400 |            4.57 |
-|   CARRY4       |    <0.001 |      151 |     15850 |            0.95 |
-|   Register     |    <0.001 |     1817 |    126800 |            1.43 |
-|   F7/F8 Muxes  |    <0.001 |      288 |     63400 |            0.45 |
-|   Others       |     0.000 |       80 |       --- |             --- |
-| Signals        |     0.007 |     5115 |       --- |             --- |
-| Block RAM      |     0.007 |       31 |       135 |           22.96 |
+| Slice Logic    |     0.003 |     6985 |       --- |             --- |
+|   LUT as Logic |     0.003 |     3625 |     63400 |            5.72 |
+|   CARRY4       |    <0.001 |      195 |     15850 |            1.23 |
+|   Register     |    <0.001 |     2140 |    126800 |            1.69 |
+|   F7/F8 Muxes  |    <0.001 |      283 |     63400 |            0.45 |
+|   Others       |     0.000 |       82 |       --- |             --- |
+| Signals        |     0.004 |     6156 |       --- |             --- |
+| Block RAM      |     0.003 |       31 |       135 |           22.96 |
 | PLL            |     0.099 |        1 |         6 |           16.67 |
 | DSPs           |    <0.001 |        8 |       240 |            3.33 |
 | I/O            |     0.002 |       39 |       210 |           18.57 |
 | Static Power   |     0.099 |          |           |                 |
-| Total          |     0.224 |          |           |                 |
+| Total          |     0.216 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -75,7 +75,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       1.000 |     0.048 |       0.032 |      0.016 |
+| Vccint    |       1.000 |     0.041 |       0.025 |      0.016 |
 | Vccaux    |       1.800 |     0.068 |       0.050 |      0.018 |
 | Vcco33    |       3.300 |     0.005 |       0.001 |      0.004 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
@@ -84,7 +84,7 @@ Table of Contents
 | Vcco135   |       1.350 |     0.000 |       0.000 |      0.000 |
 | Vcco12    |       1.200 |     0.000 |       0.000 |      0.000 |
 | Vccaux_io |       1.800 |     0.000 |       0.000 |      0.000 |
-| Vccbram   |       1.000 |     0.002 |       0.001 |      0.001 |
+| Vccbram   |       1.000 |     0.001 |       0.000 |      0.001 |
 | MGTAVcc   |       1.000 |     0.000 |       0.000 |      0.000 |
 | MGTAVtt   |       1.200 |     0.000 |       0.000 |      0.000 |
 | Vccadc    |       1.800 |     0.020 |       0.000 |      0.020 |
@@ -149,7 +149,7 @@ Table of Contents
 +----------------------------------------------+-----------+
 | Name                                         | Power (W) |
 +----------------------------------------------+-----------+
-| MiniMIPS32_SYS                               |     0.125 |
+| MiniMIPS32_SYS                               |     0.117 |
 |   clocking                                   |     0.100 |
 |     inst                                     |     0.100 |
 |   data_ram0                                  |    <0.001 |
@@ -161,12 +161,12 @@ Table of Contents
 |               prim_init.ram                  |    <0.001 |
 |             ramloop[1].ram.r                 |    <0.001 |
 |               prim_init.ram                  |    <0.001 |
-|   dev_if0                                    |     0.001 |
-|   inst_rom0                                  |     0.007 |
-|     U0                                       |     0.007 |
-|       inst_blk_mem_gen                       |     0.007 |
-|         gnbram.gnativebmg.native_blk_mem_gen |     0.007 |
-|           valid.cstr                         |     0.007 |
+|   dev_if0                                    |    <0.001 |
+|   inst_rom0                                  |     0.003 |
+|     U0                                       |     0.003 |
+|       inst_blk_mem_gen                       |     0.003 |
+|         gnbram.gnativebmg.native_blk_mem_gen |     0.003 |
+|           valid.cstr                         |     0.003 |
 |             bindec_a.bindec_inst_a           |    <0.001 |
 |             has_mux_a.A                      |    <0.001 |
 |             ramloop[0].ram.r                 |    <0.001 |
@@ -228,17 +228,18 @@ Table of Contents
 |             ramloop[9].ram.r                 |    <0.001 |
 |               prim_init.ram                  |    <0.001 |
 |   io_dec0                                    |    <0.001 |
-|   minimips32                                 |     0.014 |
+|   minimips32                                 |     0.011 |
+|     cp0_reg0                                 |    <0.001 |
 |     exe_stage0                               |     0.003 |
 |     exemem_reg0                              |    <0.001 |
 |     hilo0                                    |    <0.001 |
-|     id_stage0                                |     0.003 |
-|     idexe_reg0                               |     0.001 |
+|     id_stage0                                |     0.002 |
+|     idexe_reg0                               |    <0.001 |
 |     if_stage0                                |    <0.001 |
 |     ifid_reg0                                |    <0.001 |
 |     mem_stage0                               |    <0.001 |
 |     memwb_reg0                               |    <0.001 |
-|     regfile0                                 |     0.004 |
+|     regfile0                                 |     0.003 |
 |     scu0                                     |    <0.001 |
 |     wb_stage0                                |    <0.001 |
 +----------------------------------------------+-----------+

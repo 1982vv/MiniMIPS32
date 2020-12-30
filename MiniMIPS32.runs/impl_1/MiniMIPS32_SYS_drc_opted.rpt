@@ -1,8 +1,8 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2017.3 (win64) Build 2018833 Wed Oct  4 19:58:22 MDT 2017
-| Date         : Sat Jun 16 23:29:51 2018
-| Host         : LAPTOP-GDGGKCGC running 64-bit major release  (build 9200)
+| Date         : Wed Dec 30 17:27:11 2020
+| Host         : DESKTOP-LGQGIHC running 64-bit major release  (build 9200)
 | Command      : report_drc -file MiniMIPS32_SYS_drc_opted.rpt -pb MiniMIPS32_SYS_drc_opted.pb -rpx MiniMIPS32_SYS_drc_opted.rpx
 | Design       : MiniMIPS32_SYS
 | Device       : xc7a100tcsg324-1
@@ -51,162 +51,162 @@ Related violations: <none>
 
 DPIP-1#1 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_sign input minimips32/exe_stage0/mulres_sign/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/exe_hilo_o3 input minimips32/exe_stage0/exe_hilo_o3/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#2 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_sign input minimips32/exe_stage0/mulres_sign/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/exe_hilo_o3 input minimips32/exe_stage0/exe_hilo_o3/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#3 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_sign__0 input minimips32/exe_stage0/mulres_sign__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/exe_hilo_o3__0 input minimips32/exe_stage0/exe_hilo_o3__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#4 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_sign__0 input minimips32/exe_stage0/mulres_sign__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/exe_hilo_o3__0 input minimips32/exe_stage0/exe_hilo_o3__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#5 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_sign__1 input minimips32/exe_stage0/mulres_sign__1/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/exe_hilo_o3__1 input minimips32/exe_stage0/exe_hilo_o3__1/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#6 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_sign__1 input minimips32/exe_stage0/mulres_sign__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/exe_hilo_o3__1 input minimips32/exe_stage0/exe_hilo_o3__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#7 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_sign__2 input minimips32/exe_stage0/mulres_sign__2/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/exe_hilo_o3__2 input minimips32/exe_stage0/exe_hilo_o3__2/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#8 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_sign__2 input minimips32/exe_stage0/mulres_sign__2/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/exe_hilo_o3__2 input minimips32/exe_stage0/exe_hilo_o3__2/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#9 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_unsign input minimips32/exe_stage0/mulres_unsign/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/mulres input minimips32/exe_stage0/mulres/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#10 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_unsign input minimips32/exe_stage0/mulres_unsign/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/mulres input minimips32/exe_stage0/mulres/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#11 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_unsign__0 input minimips32/exe_stage0/mulres_unsign__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/mulres__0 input minimips32/exe_stage0/mulres__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#12 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_unsign__0 input minimips32/exe_stage0/mulres_unsign__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/mulres__0 input minimips32/exe_stage0/mulres__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#13 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_unsign__1 input minimips32/exe_stage0/mulres_unsign__1/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/mulres__1 input minimips32/exe_stage0/mulres__1/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#14 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_unsign__1 input minimips32/exe_stage0/mulres_unsign__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/mulres__1 input minimips32/exe_stage0/mulres__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#15 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_unsign__2 input minimips32/exe_stage0/mulres_unsign__2/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/mulres__2 input minimips32/exe_stage0/mulres__2/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPIP-1#16 Warning
 Input pipelining  
-DSP minimips32/exe_stage0/mulres_unsign__2 input minimips32/exe_stage0/mulres_unsign__2/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+DSP minimips32/exe_stage0/mulres__2 input minimips32/exe_stage0/mulres__2/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
 Related violations: <none>
 
 DPOP-1#1 Warning
 PREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_sign output minimips32/exe_stage0/mulres_sign/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+DSP minimips32/exe_stage0/exe_hilo_o3 output minimips32/exe_stage0/exe_hilo_o3/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
 Related violations: <none>
 
 DPOP-1#2 Warning
 PREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_sign__0 output minimips32/exe_stage0/mulres_sign__0/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+DSP minimips32/exe_stage0/exe_hilo_o3__0 output minimips32/exe_stage0/exe_hilo_o3__0/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
 Related violations: <none>
 
 DPOP-1#3 Warning
 PREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_sign__1 output minimips32/exe_stage0/mulres_sign__1/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+DSP minimips32/exe_stage0/exe_hilo_o3__1 output minimips32/exe_stage0/exe_hilo_o3__1/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
 Related violations: <none>
 
 DPOP-1#4 Warning
 PREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_sign__2 output minimips32/exe_stage0/mulres_sign__2/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+DSP minimips32/exe_stage0/exe_hilo_o3__2 output minimips32/exe_stage0/exe_hilo_o3__2/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
 Related violations: <none>
 
 DPOP-1#5 Warning
 PREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_unsign output minimips32/exe_stage0/mulres_unsign/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+DSP minimips32/exe_stage0/mulres output minimips32/exe_stage0/mulres/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
 Related violations: <none>
 
 DPOP-1#6 Warning
 PREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_unsign__0 output minimips32/exe_stage0/mulres_unsign__0/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+DSP minimips32/exe_stage0/mulres__0 output minimips32/exe_stage0/mulres__0/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
 Related violations: <none>
 
 DPOP-1#7 Warning
 PREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_unsign__1 output minimips32/exe_stage0/mulres_unsign__1/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+DSP minimips32/exe_stage0/mulres__1 output minimips32/exe_stage0/mulres__1/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
 Related violations: <none>
 
 DPOP-1#8 Warning
 PREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_unsign__2 output minimips32/exe_stage0/mulres_unsign__2/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+DSP minimips32/exe_stage0/mulres__2 output minimips32/exe_stage0/mulres__2/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
 Related violations: <none>
 
 DPOP-2#1 Warning
 MREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_sign multiplier stage minimips32/exe_stage0/mulres_sign/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+DSP minimips32/exe_stage0/exe_hilo_o3 multiplier stage minimips32/exe_stage0/exe_hilo_o3/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
 Related violations: <none>
 
 DPOP-2#2 Warning
 MREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_sign__0 multiplier stage minimips32/exe_stage0/mulres_sign__0/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+DSP minimips32/exe_stage0/exe_hilo_o3__0 multiplier stage minimips32/exe_stage0/exe_hilo_o3__0/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
 Related violations: <none>
 
 DPOP-2#3 Warning
 MREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_sign__1 multiplier stage minimips32/exe_stage0/mulres_sign__1/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+DSP minimips32/exe_stage0/exe_hilo_o3__1 multiplier stage minimips32/exe_stage0/exe_hilo_o3__1/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
 Related violations: <none>
 
 DPOP-2#4 Warning
 MREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_sign__2 multiplier stage minimips32/exe_stage0/mulres_sign__2/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+DSP minimips32/exe_stage0/exe_hilo_o3__2 multiplier stage minimips32/exe_stage0/exe_hilo_o3__2/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
 Related violations: <none>
 
 DPOP-2#5 Warning
 MREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_unsign multiplier stage minimips32/exe_stage0/mulres_unsign/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+DSP minimips32/exe_stage0/mulres multiplier stage minimips32/exe_stage0/mulres/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
 Related violations: <none>
 
 DPOP-2#6 Warning
 MREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_unsign__0 multiplier stage minimips32/exe_stage0/mulres_unsign__0/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+DSP minimips32/exe_stage0/mulres__0 multiplier stage minimips32/exe_stage0/mulres__0/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
 Related violations: <none>
 
 DPOP-2#7 Warning
 MREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_unsign__1 multiplier stage minimips32/exe_stage0/mulres_unsign__1/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+DSP minimips32/exe_stage0/mulres__1 multiplier stage minimips32/exe_stage0/mulres__1/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
 Related violations: <none>
 
 DPOP-2#8 Warning
 MREG Output pipelining  
-DSP minimips32/exe_stage0/mulres_unsign__2 multiplier stage minimips32/exe_stage0/mulres_unsign__2/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+DSP minimips32/exe_stage0/mulres__2 multiplier stage minimips32/exe_stage0/mulres__2/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
 Related violations: <none>
 
 

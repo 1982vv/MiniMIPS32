@@ -18,7 +18,10 @@ module if_stage (
     input   wire [`INST_ADDR_BUS]   jump_addr_2,
     input   wire [`INST_ADDR_BUS]   jump_addr_3,
     input   wire [`JTSEL_BUS    ]   jtsel,
-    output  wire [`INST_ADDR_BUS]   pc_plus_4
+    output  wire [`INST_ADDR_BUS]   pc_plus_4,
+    
+    //异常处理
+    output wire [`EXC_CODE_BUS]     if_exccode_o
     );
     
     wire [`INST_ADDR_BUS] pc_next; 
@@ -58,5 +61,8 @@ module if_stage (
     end
     
     assign iaddr = (ice == `CHIP_DISABLE) ? `PC_INIT : pc;    // 获得访问指令存储器的地址
+    
+    assign if_exccode_o=(cpu_rst_n==`RST_ENABLE)?`EXC_NONE:
+                        (iaddr[1:0]!=2'b00)?`EXC_ADEL:`EXC_NONE;
 
 endmodule

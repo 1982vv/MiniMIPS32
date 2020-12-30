@@ -1,8 +1,8 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2017.3 (win64) Build 2018833 Wed Oct  4 19:58:22 MDT 2017
-| Date         : Sat Jun 16 23:30:10 2018
-| Host         : LAPTOP-GDGGKCGC running 64-bit major release  (build 9200)
+| Date         : Wed Dec 30 17:27:28 2020
+| Host         : DESKTOP-LGQGIHC running 64-bit major release  (build 9200)
 | Command      : report_control_sets -file MiniMIPS32_SYS_control_sets_placed.rpt
 | Design       : MiniMIPS32_SYS
 | Device       : xc7a100t
@@ -21,7 +21,7 @@ Table of Contents
 +-------------------------------+-------+
 |             Status            | Count |
 +-------------------------------+-------+
-| Number of unique control sets |    48 |
+| Number of unique control sets |    54 |
 +-------------------------------+-------+
 
 
@@ -31,12 +31,12 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
-| No           | No                    | No                     |               8 |            4 |
+| No           | No                    | No                     |               9 |            5 |
 | No           | No                    | Yes                    |               0 |            0 |
-| No           | Yes                   | No                     |             323 |          141 |
-| Yes          | No                    | No                     |              32 |           15 |
+| No           | Yes                   | No                     |             447 |          186 |
+| Yes          | No                    | No                     |              37 |           10 |
 | Yes          | No                    | Yes                    |               0 |            0 |
-| Yes          | Yes                   | No                     |            1454 |          760 |
+| Yes          | Yes                   | No                     |            1647 |          695 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
 

@@ -65,7 +65,8 @@ module id_stage(
     output wire [`INST_ADDR_BUS]    id_pc_o,
     output wire                     id_in_delay_o,
     output wire                     next_delay_o,
-    output wire [`EXC_CODE_BUS]     id_exccode_o
+    output wire [`EXC_CODE_BUS]     id_exccode_o,
+    input wire [`EXC_CODE_BUS]     id_exccode_i
     );
     
     //异常处理
@@ -100,14 +101,14 @@ module id_stage(
     wire inst_lui =~op[5]&~op[4]&op[3]& op[2]& op[1]& op[0];
     wire inst_addiu=~op[5]&~op[4]& op[3]& ~op[2]&~op[ 1]& op[0];
     wire inst_sltiu=~op[5]&~op[4]& op[3]&~op[2]& op[1]& op[0];
-    wire inst_lb =op[5]&~op[4]&~op[3]&~op[2]&op[0];
+    wire inst_lb =op[5]&~op[4]&~op[3]&~op[2]&~op[0];
     wire inst_lw =op[5]&~op[4]&~op[3] &~op[2]& op[1]& op[0];
     wire inst_sb =op[5]&~op[4]& op[3]&~op[2]&~op[1]&~op[0];
     wire inst_sw =op[5]&~op[4]& op[3]&~op[2]&op[1]&op[0];
     
     //11.8 增加22条非转移指令
     wire inst_addu = inst_reg& func[5]&~func[4]&~func[3]&~func[2]& ~func[1]& func[0];
-    wire inst_sub = inst_reg& func[5]&~func[4]&~func[3]&~func[2]& ~func[1]& ~func[0];
+    wire inst_sub = inst_reg& func[5]&~func[4]&~func[3]&~func[2]& func[1]& ~func[0];
     wire inst_sltu = inst_reg& func[5]&~func[4]&func[3]&~func[2]& func[1]& func[0];
     wire inst_or = inst_reg& func[5]&~func[4]&~func[3]&func[2]& ~func[1]& func[0];
     wire inst_nor = inst_reg& func[5]&~func[4]&~func[3]&func[2]& func[1]& func[0];
@@ -164,7 +165,7 @@ module id_stage(
                             | inst_or | inst_nor | inst_xor |  inst_andi | inst_xori | inst_eret | inst_mfc0 | inst_mtc0);
     assign id_alutype_o[0] =(cpu_rst_n ==`RST_ENABLE)?1'b0: (inst_add | inst_subu | inst_slt | inst_mfhi | inst_mflo
                             | inst_addiu | inst_sltiu | inst_lb |inst_lw | inst_sb | inst_sw
-                            | inst_addu | inst_sub | inst_sltu | inst_mthi | inst_mtlo | inst_andi | inst_slti | inst_lbu 
+                            | inst_addu | inst_sub | inst_sltu | inst_mthi | inst_mtlo | inst_addi | inst_slti | inst_lbu 
                             | inst_lh | inst_lhu | inst_sh | inst_j | inst_jal | inst_jr | inst_beq | inst_bne | inst_jalr |inst_bgez | inst_bgtz | inst_blez
                             | inst_bltz | inst_bgezal | inst_bltzal | inst_mfc0);
     //内部操作码aluop
@@ -186,7 +187,7 @@ module id_stage(
      (inst_add | inst_subu | inst_and | inst_mfhi | inst_mflo |
      inst_ori | inst_addiu | inst_sb | inst_sw
      | inst_sllv | inst_srlv | inst_srav | inst_multu 
-     |  inst_mthi | inst_mtlo | inst_j | inst_jal 
+     |  inst_mthi | inst_mtlo | inst_addi | inst_slti | inst_j | inst_jal 
      | inst_jr | inst_bltzal | inst_mfc0 | inst_mtc0 );
     assign id_aluop_o[2]=(cpu_rst_n==`RST_ENABLE)?1'b0:
      (inst_slt | inst_and | inst_mult | inst_mfhi | inst_mflo|
@@ -224,16 +225,7 @@ module id_stage(
     assign id_whilo_o =(cpu_rst_n == `RST_ENABLE)?1'b0:(inst_mult| inst_multu 
                              |  inst_mthi | inst_mtlo | inst_div | inst_divu) ;
                              
-    //生成相等使能信号
-    wire equ =(cpu_rst_n == `RST_ENABLE)?1'b0:
-               (inst_beq)?(id_src1_o == id_src2_o):
-               (inst_bne)?(id_src1_o != id_src2_o):
-               (inst_bgez)?($signed(id_src1_o) >= 1'b0):
-               (inst_bgtz)?($signed(id_src1_o) > 1'b0):
-               (inst_blez)?($signed(id_src1_o) <= 1'b0):
-               (inst_bltz)?($signed(id_src1_o) < 1'b0):
-               (inst_bgezal)?($signed(id_src1_o) >= 1'b0):
-               (inst_bltzal)?($signed(id_src1_o) < 1'b0):1'b0;
+
     //移位使能指令
     wire shift =inst_sll| inst_srl| inst_sra ;
     //立即数使能信号
@@ -272,11 +264,7 @@ module id_stage(
     //生成子程序调用信号
     wire jal=inst_jal | inst_bgezal | inst_bltzal | inst_jalr;
     
-    //生成转移地址选择信号
-    assign jtsel[1]=inst_jr | inst_beq & equ | inst_bne & equ | inst_bgez& equ | inst_bgtz& equ | inst_blez& equ
-                    | inst_bltz& equ | inst_bgezal& equ | inst_bltzal& equ | inst_jalr;
-    assign jtsel[0]=inst_j | inst_jal | inst_beq & equ | inst_bne & equ| inst_bgez& equ | inst_bgtz& equ | inst_blez& equ
-                    | inst_bltz& equ | inst_bgezal& equ | inst_bltzal& equ;
+
     
     //产生源操作数选择信号
     wire [1:0] fwrd1 = (cpu_rst_n==`RST_ENABLE)? 2'b00:
@@ -302,7 +290,10 @@ module id_stage(
                     (rtsel ==`RT_ENABLE || inst_mfc0 )? rt:
                     (jal == 1'd1     )? 5'b11111:rd;
     //获得访存阶段要存入数据存储器的数据(来自通用寄存器堆读数据端口2)
-    assign id_din_o =(cpu_rst_n ==`RST_ENABLE)? `ZERO_WORD: rd2;
+    assign id_din_o =(cpu_rst_n ==`RST_ENABLE)? `ZERO_WORD: 
+                     (fwrd2 == 2'b01)?exe2id_wd:
+                     (fwrd2 == 2'b10)?mem2id_wd:
+                     (fwrd2 == 2'b11)? rd2:`ZERO_WORD;
     //获得源操作数1。如果 shift信号有效,则源操作数1为移位位数,否则为从读通用寄存器堆端口1获得的数据
     assign id_src1_o =(cpu_rst_n == `RST_ENABLE)? `ZERO_WORD:
     (shift ==`SHIFT_ENABLE )?{27'b0, sa}:
@@ -315,6 +306,23 @@ module id_stage(
     (fwrd2 ==2'b01 )? exe2id_wd:
     (fwrd2 ==2'b10 )? mem2id_wd:
      (fwrd2 ==2'b11 )? rd2: `ZERO_WORD;
+     
+    //生成相等使能信号
+     wire equ =(cpu_rst_n == `RST_ENABLE)?1'b0:
+                (inst_beq)?(id_src1_o == id_src2_o):
+                (inst_bne)?(id_src1_o != id_src2_o):
+                (inst_bgez)?($signed(id_src1_o) >= 0):
+                (inst_bgtz)?($signed(id_src1_o) > 0):
+                (inst_blez)?($signed(id_src1_o) <= 0):
+                (inst_bltz)?($signed(id_src1_o) < 0):
+                (inst_bgezal)?($signed(id_src1_o) >= 0):
+                (inst_bltzal)?($signed(id_src1_o) < 0):1'b0;
+               
+    //生成转移地址选择信号
+                assign jtsel[1]=inst_jr | inst_beq & equ | inst_bne & equ | inst_bgez& equ | inst_bgtz& equ | inst_blez& equ
+                                | inst_bltz& equ | inst_bgezal& equ | inst_bltzal& equ | inst_jalr;
+                assign jtsel[0]=inst_j | inst_jal | inst_beq & equ | inst_bne & equ| inst_bgez& equ | inst_bgtz& equ | inst_blez& equ
+                                | inst_bltz& equ | inst_bgezal& equ | inst_bltzal& equ;
     
     //生成计算转移地址所需信号
     wire [`INST_ADDR_BUS] pc_plus_8=pc_plus_4+4;
@@ -337,9 +345,66 @@ module id_stage(
                          (mem2id_wreg == `WRITE_ENABLE && mem2id_wa == ra2 && rreg2 == `READ_ENABLE))&&
                          (mem2id_mreg == 1'b1))?`STOP:`NOSTOP;           
     assign next_delay_o=(cpu_rst_n==`RST_ENABLE)? 1'b0:
-                        (inst_j | inst_jr | inst_jal | inst_beq | inst_bne);
+                        (inst_j | inst_jr | inst_jal | inst_beq | inst_bne |inst_bgez | inst_bgtz | inst_blez | inst_bltz | inst_bgezal | inst_bltzal | inst_jalr);
+                        
+    wire is_unknow = inst_and  |  inst_subu | inst_slt |
+                        inst_add |
+                        inst_mult |
+                        inst_mfhi |
+                        inst_mflo |
+                        inst_sll |
+                        inst_ori |
+                        inst_lui|
+                        inst_addiu |
+                        inst_sltiu |
+                        inst_lb |
+                        inst_lw |
+                        inst_sb |
+                        inst_sw |
+                        inst_addu |
+                        inst_sub |
+                        inst_sltu |
+                        inst_or |
+                        inst_nor |
+                        inst_xor |
+                        inst_srl |
+                        inst_sra |
+                        inst_sllv |
+                        inst_srlv |
+                        inst_srav |
+                        inst_multu |
+                        inst_mthi |
+                        inst_mtlo |
+                        inst_addi |
+                        inst_slti |
+                        inst_andi |
+                        inst_xori|
+                        inst_lbu |
+                        inst_lh |
+                        inst_lhu |
+                        inst_sh|
+                        inst_j |
+                        inst_jal |
+                        inst_jr |
+                        inst_beq |
+                        inst_bne |
+                        inst_jalr|
+                        inst_bgez |
+                        inst_bgtz |
+                        inst_blez |
+                        inst_bltz |
+                        inst_bgezal|
+                        inst_bltzal |
+                        inst_div |
+                        inst_divu |
+                        inst_syscall |
+                        inst_eret |
+                        inst_mfc0 |
+                        inst_mtc0 ;
+
     assign id_exccode_o=(cpu_rst_n==`RST_ENABLE)?`EXC_NONE:
                         (inst_syscall == 1'b1)?`EXC_SYS:
-                        (inst_eret == 1'b1)?`EXC_ERET:`EXC_NONE;
-    assign cp0_addr = (cpu_rst_n==`RST_ENABLE)?`REG_NOP: rd;                               
+                        (inst_eret == 1'b1)?`EXC_ERET:
+                        (is_unknow == 0)?`EXC_RI:id_exccode_i;
+    assign cp0_addr = (cpu_rst_n==`RST_ENABLE)?`REG_NOP:rd;                               
 endmodule

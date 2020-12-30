@@ -16,7 +16,11 @@ module ifid_reg (
 	
 	//转移指令
 	input  wire [`INST_ADDR_BUS]       if_pc_plus_4,
-	output reg  [`INST_ADDR_BUS]       id_pc_plus_4
+	output reg  [`INST_ADDR_BUS]       id_pc_plus_4,
+	
+	//异常处理
+    input wire [`EXC_CODE_BUS]     if_exccode,
+    output reg [`EXC_CODE_BUS]     id_exccode
 	);
 
 	always @(posedge cpu_clk_50M) begin
@@ -24,15 +28,18 @@ module ifid_reg (
 		if (cpu_rst_n == `RST_ENABLE || flush) begin
 			id_pc 	<= `PC_INIT;
 			id_pc_plus_4 <= `ZERO_WORD;
+			id_exccode  <= `EXC_NONE;
 		end
 		else if(stall[1]==`STOP && stall[2]==`NOSTOP) begin
             id_pc    <= `ZERO_WORD;        
             id_pc_plus_4 <= `ZERO_WORD;
+            id_exccode  <= `EXC_NONE;
         end		
 		// 将来自取指阶段的信息寄存并送至译码阶段
 		else if(stall[1]==`NOSTOP) begin
 			id_pc	<= if_pc;		
 			id_pc_plus_4 <= if_pc_plus_4;
+			id_exccode  <= if_exccode;
 		end
 	end
 

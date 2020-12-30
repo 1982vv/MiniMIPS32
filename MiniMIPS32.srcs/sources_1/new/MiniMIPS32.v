@@ -19,13 +19,17 @@ module MiniMIPS32(
     input  wire [`INST_BUS]      dm
     );
     
+    assign int= 0;
+    
     //连接取指阶段与取指/译码寄存器的信号
     wire [`WORD_BUS      ] pc;
     wire [`INST_ADDR_BUS]   pc_plus_4;
+    wire [`EXC_CODE_BUS]     if_exccode_o;
 
     // 连接IF/ID模块与译码阶段ID模块的变量 
     wire [`WORD_BUS      ] id_pc_i;
     wire [`INST_ADDR_BUS]   id_pc_plus_4;
+    wire [`EXC_CODE_BUS]     id_exccode;
       
     // 连接译码阶段ID模块与通用寄存器Regfile模块的变量 
     wire 				   re1;
@@ -95,6 +99,7 @@ module MiniMIPS32(
     wire [`REG_BUS       ] mem_dre_o;
     wire                   mem_whilo_o;
     wire [`DOUBLE_REG_BUS] mem_hilo_o;
+    wire                   unsign1;
     
     //连接访存/写回寄存器与写回阶段的信号
     wire 				   wb_wreg_i;
@@ -104,6 +109,7 @@ module MiniMIPS32(
     wire [`REG_BUS       ] wb_dre_i;
     wire                   wb_whilo_i;
     wire [`DOUBLE_REG_BUS] wb_hilo_i;
+    wire                   unsign2;
     
     //连接写回阶段与通用寄存器堆的信号
     wire 				   wb_wreg_o;
@@ -173,19 +179,21 @@ module MiniMIPS32(
     wire [`REG_BUS     ] data_o;
     wire [`REG_BUS     ] status_o;
     wire [`REG_BUS     ] cause_o;
+    wire [`REG_BUS     ] eaddr;
     
     if_stage if_stage0(
         .cpu_clk_50M(cpu_clk_50M), .cpu_rst_n(cpu_rst_n),
         .pc(pc), .ice(ice), .iaddr(iaddr),.jump_addr_1(jump_addr_1),
         .jump_addr_2(jump_addr_2),.jump_addr_3(jump_addr_3),
         .jtsel(jtsel),.pc_plus_4(pc_plus_4),.stall(stall),
-        .flush(flush),.cp0_excaddr(cp0_excaddr)
+        .flush(flush),.cp0_excaddr(cp0_excaddr),.if_exccode_o(if_exccode_o)
         );
     
     ifid_reg ifid_reg0(
         .cpu_clk_50M(cpu_clk_50M), .cpu_rst_n(cpu_rst_n),
-        .if_pc(pc), .id_pc(id_pc_i),.if_pc_plus(pc_plus_4),
-        .id_pc_plus_4(id_pc_plus_4),.stall(stall),.flush(flush)
+        .if_pc(pc), .id_pc(id_pc_i),.if_pc_plus_4(pc_plus_4),
+        .id_pc_plus_4(id_pc_plus_4),.stall(stall),.flush(flush),
+        .if_exccode(if_exccode_o),.id_exccode(id_exccode)
     );
 
     id_stage id_stage0(
@@ -208,7 +216,8 @@ module MiniMIPS32(
         .mem2id_mreg(mem_mreg_o),.stallreq_id(stallreq_id),
         .id_in_delay_i(next_delay_o2),.flush_im(flush_im),
         .id_exccode_o(id_exccode_o),.id_pc_o(id_pc_o),
-        .next_delay_o(next_delay_o),.cp0_addr(cp0_addr),.id_in_delay_o(id_in_delay_o)
+        .next_delay_o(next_delay_o),.cp0_addr(cp0_addr),.id_in_delay_o(id_in_delay_o),
+        .id_exccode_i(id_exccode)
     );
     
     regfile regfile0(
@@ -235,7 +244,7 @@ module MiniMIPS32(
         .exe_cp0_addr(exe_cp0_addr),.exe_in_delay(exe_in_delay)
     );
     
-    exe_stage exe_stage0(.cpu_rst_n(cpu_rst_n),
+    exe_stage exe_stage0(.cpu_rst_n(cpu_rst_n),.cpu_clk_50M(cpu_clk_50M),
         .exe_alutype_i(exe_alutype_i), .exe_aluop_i(exe_aluop_i),
         .exe_src1_i(exe_src1_i), .exe_src2_i(exe_src2_i),
         .exe_wa_i(exe_wa_i), .exe_wreg_i(exe_wreg_i),
@@ -247,13 +256,13 @@ module MiniMIPS32(
         .exe_whilo_o(exe_whilo_o),.exe_hilo_o(exe_hilo_o),
         .mem2exe_whilo(mem_whilo_o),.mem2exe_hilo(mem_hilo_o),
         .wb2exe_whilo(wb_whilo_o),.wb2exe_hilo(wb_hilo_o),
-        .ret_addr(exe_ret_addr),.exe_mreg_o(exe_mreg_o),.stallreq_exe(stallreq_exe),
+        .ret_addr(exe_ret_addr),.stallreq_exe(stallreq_exe),
         .mem2exe_cp0_we(cp0_we_o2),.mem2exe_cp0_wa(cp0_waddr_o2),.mem2exe_cp0_wd(cp0_wdata_o2),
         .wb2exe_cp0_we(cp0_we_o3),.wb2exe_cp0_wa(cp0_waddr_o3),.wb2exe_cp0_wd(cp0_wdata_o3),
-        .exe_exccode_i(exe_exccode),.exe_pc_i(exe_pc),.cp0_data_i(data_o),.exe_cp0_addr_i(exe_cp0_addr),
+        .exe_exccode_i(exe_exccode),.exe_pc_i(exe_pc),.cp0_data_i(data_o),.cp0_addr_i(exe_cp0_addr),
         .exe_in_delay_i(exe_in_delay),.exe_exccode_o(exe_exccode_o),.exe_pc_o(exe_pc_o),
         .exe_in_delay_o(exe_in_delay_o),.cp0_re_o(cp0_re_o),.cp0_raddr_o(cp0_raddr_o),
-        .cp0_wdata_o(cp0_wdata_o)
+        .cp0_wdata_o(cp0_wdata_o),.cp0_we_o(cp0_we_o),.cp0_waddr_o(cp0_waddr_o)
     );
         
     exemem_reg exemem_reg0(
@@ -280,13 +289,14 @@ module MiniMIPS32(
         .mem_wa_o(mem_wa_o), .mem_wreg_o(mem_wreg_o), .mem_dreg_o(mem_dreg_o),
         .mem_mreg_o(mem_mreg_o),.dre(mem_dre_o),
         .mem_whilo_o(mem_whilo_o),.mem_hilo_o(mem_hilo_o),
-        .dce(dce),.daddr(daddr),.we(we),.din(din),.mem_mreg_o(mem_mreg_o),
+        .dce(dce),.daddr(daddr),.we(we),.din(din),
         .mem_exccode_i(mem_exccode),.mem_pc_i(mem_pc),.mem_in_delay_i(mem_in_delay),
         .cp0_we_i(mem_cp0_we),.cp0_waddr_i(mem_cp0_waddr),.cp0_wdata_i(mem_cp0_wdata),
         .wb2mem_cp0_we(cp0_we_o3),.wb2mem_cp0_wa(cp0_waddr_o3),.wb2mem_cp0_wd(cp0_wdata_o3),
         .cp0_status(status_o),.cp0_cause(cause_o),.cp0_exccode(cp0_exccode),
         .cp0_pc(cp0_pc),.cp0_in_delay(cp0_in_delay),.cp0_we_o(cp0_we_o2),
-        .cp0_waddr_o(cp0_waddr_o2),.cp0_wdata_o(cp0_wdata_o2)
+        .cp0_waddr_o(cp0_waddr_o2),.cp0_wdata_o(cp0_wdata_o2),.unsign(unsign1),
+        .cp0_eaddr(eaddr)
     );
     	
     memwb_reg memwb_reg0(
@@ -297,10 +307,10 @@ module MiniMIPS32(
         .wb_wa(wb_wa_i), .wb_wreg(wb_wreg_i), .wb_dreg(wb_dreg_i),
         .wb_mreg(wb_mreg_i),.wb_dre(wb_dre_i),
         .wb_whilo(wb_whilo_i),.wb_hilo(wb_hilo_i),
-        .mem_cp0_we(cp0_we_o3),.mem_cp0_waddr(cp0_waddr_o3),
-        .mem_cp0_wdata(cp0_wdata_o3),.flush(flush),
+        .mem_cp0_we(cp0_we_o2),.mem_cp0_waddr(cp0_waddr_o2),
+        .mem_cp0_wdata(cp0_wdata_o2),.flush(flush),
         .wb_cp0_we(wb_cp0_we),.wb_cp0_waddr(wb_cp0_waddr),
-        .wb_cp0_wdata(wb_cp0_wdata)
+        .wb_cp0_wdata(wb_cp0_wdata),.mem_unsign(unsign1),.wb_unsign(unsign2)
     );
 
     wb_stage wb_stage0(
@@ -312,7 +322,8 @@ module MiniMIPS32(
         .wb_wa_o(wb_wa_o), .wb_wreg_o(wb_wreg_o), .wb_wd_o(wb_wd_o),
         .wb_whilo_o(wb_whilo_o),.wb_hilo_o(wb_hilo_o),
         .cp0_we_i(wb_cp0_we),.cp0_waddr_i(wb_cp0_waddr),.cp0_wdata_i(wb_cp0_wdata),
-        .cp0_we_o(cp0_we_o3),.cp0_waddr_o(cp0_waddr_o3),.cp0_wdata_o(cp0_wdata_o3)
+        .cp0_we_o(cp0_we_o3),.cp0_waddr_o(cp0_waddr_o3),.cp0_wdata_o(cp0_wdata_o3),
+        .wb_unsign_i(unsign2)
     );
     
     hilo hilo0(
@@ -322,15 +333,17 @@ module MiniMIPS32(
         .hi_o(exe_hi_i),.lo_o(exe_lo_i)
     );
     scu scu0(
-        .cpu_clk_50M(cpu_clk_50M),.stallreq_id(stallreq_id),
+        .cpu_rst_n(cpu_rst_n),.stallreq_id(stallreq_id),
         .stallreq_exe(stallreq_exe),.stall(stall)
     );
     
-    cp0 cp00(
+    cp0_reg cp0_reg0(
+        .cpu_clk_50M(cpu_clk_50M), .cpu_rst_n(cpu_rst_n),
         .exccode_i(cp0_exccode),.pc_i(cp0_pc),.in_delay_i(cp0_in_delay),
         .re(cp0_re_o),.raddr(cp0_raddr_o),.we(cp0_we_o3),.waddr(cp0_waddr_o3),
         .wdata(cp0_wdata_o3),.int_i(int),.flush_im(flush_im),.cp0_excaddr(cp0_excaddr),
-        .flush(flush),.data_o(data_o),.status_o(status_o),.cause_o(cause_o)
+        .flush(flush),.data_o(data_o),.status_o(status_o),.cause_o(cause_o),
+        .eaddr(eaddr)
     );
     
 endmodule

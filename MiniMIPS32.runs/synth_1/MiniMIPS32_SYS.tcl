@@ -16,54 +16,89 @@ proc create_report { reportName command } {
     send_msg_id runtcl-5 warning "$msg"
   }
 }
+set_param xicom.use_bs_reader 1
 create_project -in_memory -part xc7a100tcsg324-1
 
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
 set_msg_config -source 4 -id {IP_Flow 19-2162} -severity warning -new_severity info
-set_property webtalk.parent_dir C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.cache/wt [current_project]
-set_property parent.project_path C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.xpr [current_project]
+set_property webtalk.parent_dir D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.cache/wt [current_project]
+set_property parent.project_path D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.xpr [current_project]
 set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
-set_property ip_output_repo c:/Users/xzjqx/Desktop/Task/MiniMIPS32/MiniMIPS32.cache/ip [current_project]
+set_property ip_output_repo d:/vivado/MiniMIPS32/MiniMIPS32.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
-add_files C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/coe/data_ram.coe
-add_files C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/coe/inst_rom.coe
-add_files C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/coe/sim_inst_rom.coe
-add_files C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/coe/sim_data_ram.coe
-add_files c:/Users/xzjqx/Desktop/Task/test_cpu/soft/test_c/build/fib_inst.coe
-add_files c:/Users/xzjqx/Desktop/Task/test_cpu/soft/test_c/build/fib_data.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/coe/data_ram.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/coe/inst_rom.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/coe/sim_inst_rom.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/coe/sim_data_ram.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/fib_inst.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/fib_data.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/add_inst.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/add_data.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/leap-year_inst.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/leap-year_data.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/prime_inst.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/prime_data.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/quick-sort_data.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/quick-sort_inst.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/coe/logic_inst.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/inst_rom.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/data_ram.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/hwtest_inst.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/hwtest_data.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/addtest_inst.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/addtest_data.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/divtest_inst.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/divtest_data.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/sratest_inst.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/sratest_data.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/bxxztest_inst.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/bxxztest_data.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/syscalltest_inst.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/syscalltest_data.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/addrexc_inst.coe
+add_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/addrexc_data.coe
+add_files d:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/addrexc2_inst.coe
+add_files d:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/addrexc2_data.coe
+add_files d:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/addrexc3_inst.coe
+add_files d:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/addrexc3_data.coe
+add_files d:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/eretexc_inst.coe
+add_files d:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/eretexc_data.coe
+add_files d:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/sim_inst_rom.coe
+add_files d:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/imports/build/sim_data_ram.coe
 read_verilog -library xil_defaultlib {
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/defines.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/MiniMIPS32.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/dev_if.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/exe_stage.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/exemem_reg.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/hilo.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/id_stage.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/idexe_reg.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/if_stage.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/ifid_reg.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/io_dec.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/mem_stage.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/memwb_reg.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/regfile.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/scu.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/wb_stage.v
-  C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/MiniMIPS32_SYS.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/defines.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/MiniMIPS32.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/cp0_reg.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/dev_if.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/exe_stage.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/exemem_reg.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/hilo.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/id_stage.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/idexe_reg.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/if_stage.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/ifid_reg.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/io_dec.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/mem_stage.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/memwb_reg.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/regfile.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/scu.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/wb_stage.v
+  D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/new/MiniMIPS32_SYS.v
 }
-read_ip -quiet C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci
-set_property used_in_implementation false [get_files -all c:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_board.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc]
-set_property used_in_implementation false [get_files -all c:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_ooc.xdc]
+read_ip -quiet D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/inst_rom/inst_rom.xci
+set_property used_in_implementation false [get_files -all d:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/inst_rom/inst_rom_ooc.xdc]
 
-read_ip -quiet C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/data_ram/data_ram.xci
-set_property used_in_implementation false [get_files -all c:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/data_ram/data_ram_ooc.xdc]
+read_ip -quiet D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci
+set_property used_in_implementation false [get_files -all d:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_board.xdc]
+set_property used_in_implementation false [get_files -all d:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc]
+set_property used_in_implementation false [get_files -all d:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_ooc.xdc]
 
-read_ip -quiet C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/inst_rom/inst_rom.xci
-set_property used_in_implementation false [get_files -all c:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/inst_rom/inst_rom_ooc.xdc]
+read_ip -quiet D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/data_ram/data_ram.xci
+set_property used_in_implementation false [get_files -all d:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/sources_1/ip/data_ram/data_ram_ooc.xdc]
 
 # Mark all dcp files as not used in implementation to prevent them from being
 # stitched into the results of this synthesis run. Any black boxes in the
@@ -73,9 +108,11 @@ set_property used_in_implementation false [get_files -all c:/Users/xzjqx/Desktop
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
-read_xdc C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/constrs_1/new/MiniMIPS32.xdc
-set_property used_in_implementation false [get_files C:/Users/xzjqx/Desktop/Task/test_cpu/MiniMIPS32/MiniMIPS32.srcs/constrs_1/new/MiniMIPS32.xdc]
+read_xdc D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/constrs_1/new/MiniMIPS32.xdc
+set_property used_in_implementation false [get_files D:/vivado/MiniMIPS32_SyS/MiniMIPS32/MiniMIPS32.srcs/constrs_1/new/MiniMIPS32.xdc]
 
+read_xdc dont_touch.xdc
+set_property used_in_implementation false [get_files dont_touch.xdc]
 
 synth_design -top MiniMIPS32_SYS -part xc7a100tcsg324-1 -flatten_hierarchy none
 

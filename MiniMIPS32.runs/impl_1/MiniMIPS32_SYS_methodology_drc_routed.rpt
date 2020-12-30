@@ -1,8 +1,8 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2017.3 (win64) Build 2018833 Wed Oct  4 19:58:22 MDT 2017
-| Date         : Sat Jun 16 23:31:06 2018
-| Host         : LAPTOP-GDGGKCGC running 64-bit major release  (build 9200)
+| Date         : Wed Dec 30 17:28:28 2020
+| Host         : DESKTOP-LGQGIHC running 64-bit major release  (build 9200)
 | Command      : report_methodology -file MiniMIPS32_SYS_methodology_drc_routed.rpt -pb MiniMIPS32_SYS_methodology_drc_routed.pb -rpx MiniMIPS32_SYS_methodology_drc_routed.rpx
 | Design       : MiniMIPS32_SYS
 | Device       : xc7a100tcsg324-1
@@ -35,42 +35,42 @@ Table of Contents
 -----------------
 SYNTH-10#1 Warning
 Wide multiplier  
-Detected multiplier at minimips32/exe_stage0/mulres_sign of size 15x18, it is decomposed from a wide multipler into 4 DSP blocks.
+Detected multiplier at minimips32/exe_stage0/exe_hilo_o3 of size 16x18, it is decomposed from a wide multipler into 4 DSP blocks.
 Related violations: <none>
 
 SYNTH-10#2 Warning
 Wide multiplier  
-Detected multiplier at minimips32/exe_stage0/mulres_sign__0 of size 15x15, it is decomposed from a wide multipler into 4 DSP blocks.
+Detected multiplier at minimips32/exe_stage0/exe_hilo_o3__0 of size 16x16, it is decomposed from a wide multipler into 4 DSP blocks.
 Related violations: <none>
 
 SYNTH-10#3 Warning
 Wide multiplier  
-Detected multiplier at minimips32/exe_stage0/mulres_sign__1 of size 18x18, it is decomposed from a wide multipler into 4 DSP blocks.
+Detected multiplier at minimips32/exe_stage0/exe_hilo_o3__1 of size 18x18, it is decomposed from a wide multipler into 4 DSP blocks.
 Related violations: <none>
 
 SYNTH-10#4 Warning
 Wide multiplier  
-Detected multiplier at minimips32/exe_stage0/mulres_sign__2 of size 18x15, it is decomposed from a wide multipler into 4 DSP blocks.
+Detected multiplier at minimips32/exe_stage0/exe_hilo_o3__2 of size 18x16, it is decomposed from a wide multipler into 4 DSP blocks.
 Related violations: <none>
 
 SYNTH-10#5 Warning
 Wide multiplier  
-Detected multiplier at minimips32/exe_stage0/mulres_unsign of size 16x18, it is decomposed from a wide multipler into 4 DSP blocks.
+Detected multiplier at minimips32/exe_stage0/mulres of size 15x18, it is decomposed from a wide multipler into 4 DSP blocks.
 Related violations: <none>
 
 SYNTH-10#6 Warning
 Wide multiplier  
-Detected multiplier at minimips32/exe_stage0/mulres_unsign__0 of size 16x16, it is decomposed from a wide multipler into 4 DSP blocks.
+Detected multiplier at minimips32/exe_stage0/mulres__0 of size 15x15, it is decomposed from a wide multipler into 4 DSP blocks.
 Related violations: <none>
 
 SYNTH-10#7 Warning
 Wide multiplier  
-Detected multiplier at minimips32/exe_stage0/mulres_unsign__1 of size 18x18, it is decomposed from a wide multipler into 4 DSP blocks.
+Detected multiplier at minimips32/exe_stage0/mulres__1 of size 18x18, it is decomposed from a wide multipler into 4 DSP blocks.
 Related violations: <none>
 
 SYNTH-10#8 Warning
 Wide multiplier  
-Detected multiplier at minimips32/exe_stage0/mulres_unsign__2 of size 18x16, it is decomposed from a wide multipler into 4 DSP blocks.
+Detected multiplier at minimips32/exe_stage0/mulres__2 of size 18x15, it is decomposed from a wide multipler into 4 DSP blocks.
 Related violations: <none>
 
 TIMING-6#1 Warning

@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="2727333333fs"></ZoomStartTime>
-      <ZoomEndTime time="2904533334fs"></ZoomEndTime>
-      <Cursor1Time time="2345000000fs"></Cursor1Time>
+      <ZoomStartTime time="874700000fs"></ZoomStartTime>
+      <ZoomEndTime time="932700001fs"></ZoomEndTime>
+      <Cursor1Time time="947100000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="96"></NameColumnWidth>
-      <ValueColumnWidth column_width="58"></ValueColumnWidth>
+      <NameColumnWidth column_width="166"></NameColumnWidth>
+      <ValueColumnWidth column_width="135"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="45" />
+   <WVObjectSize size="61" />
    <wvobject fp_name="/MiniMIPS32_SYS_tb/sys_clk_100M" type="logic">
       <obj_property name="ElementShortName">sys_clk_100M</obj_property>
       <obj_property name="ObjectShortName">sys_clk_100M</obj_property>
@@ -48,17 +48,9 @@
       <obj_property name="ElementShortName">num_a_g[6:0]</obj_property>
       <obj_property name="ObjectShortName">num_a_g[6:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/regfile0/regs[4]" type="array">
-      <obj_property name="ElementShortName">[4][31:0]</obj_property>
-      <obj_property name="ObjectShortName">[4][31:0]</obj_property>
-      <obj_property name="CustomSignalColor">#FFFF00</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
-   </wvobject>
-   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/regfile0/regs[19]" type="array">
-      <obj_property name="ElementShortName">[19][31:0]</obj_property>
-      <obj_property name="ObjectShortName">[19][31:0]</obj_property>
-      <obj_property name="CustomSignalColor">#FFFF00</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/if_stage0/pc" type="array">
+      <obj_property name="ElementShortName">pc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pc[31:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/id_stage0/id_pc_i" type="array">
       <obj_property name="ElementShortName">id_pc_i[31:0]</obj_property>
@@ -75,6 +67,42 @@
    <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/id_stage0/id_inst_i" type="array">
       <obj_property name="ElementShortName">id_inst_i[31:0]</obj_property>
       <obj_property name="ObjectShortName">id_inst_i[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/mem_stage0/mem_aluop_i" type="array">
+      <obj_property name="ElementShortName">mem_aluop_i[7:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_aluop_i[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/id_stage0/id_aluop_o" type="array">
+      <obj_property name="ElementShortName">id_aluop_o[7:0]</obj_property>
+      <obj_property name="ObjectShortName">id_aluop_o[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/cp0_reg0/status" type="array">
+      <obj_property name="ElementShortName">status[31:0]</obj_property>
+      <obj_property name="ObjectShortName">status[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/cp0_reg0/cause" type="array">
+      <obj_property name="ElementShortName">cause[31:0]</obj_property>
+      <obj_property name="ObjectShortName">cause[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/cp0_reg0/flush" type="logic">
+      <obj_property name="ElementShortName">flush</obj_property>
+      <obj_property name="ObjectShortName">flush</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/cp0_reg0/badvaddr" type="array">
+      <obj_property name="ElementShortName">badvaddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">badvaddr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/mem_stage0/cp0_exccode" type="array">
+      <obj_property name="ElementShortName">cp0_exccode[4:0]</obj_property>
+      <obj_property name="ObjectShortName">cp0_exccode[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/cp0_reg0/epc" type="array">
+      <obj_property name="ElementShortName">epc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">epc[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/cp0_reg0/wdata" type="array">
+      <obj_property name="ElementShortName">wdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wdata[31:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/regfile0/regs[0]" type="array">
       <obj_property name="ElementShortName">[0][31:0]</obj_property>
@@ -203,5 +231,37 @@
    <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/regfile0/regs[31]" type="array">
       <obj_property name="ElementShortName">[31][31:0]</obj_property>
       <obj_property name="ObjectShortName">[31][31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/cp0_reg0/status_o" type="array">
+      <obj_property name="ElementShortName">status_o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">status_o[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/cp0_reg0/cause_o" type="array">
+      <obj_property name="ElementShortName">cause_o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">cause_o[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/mem_stage0/cp0_wdata_o" type="array">
+      <obj_property name="ElementShortName">cp0_wdata_o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">cp0_wdata_o[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/memwb_reg0/wb_cp0_wdata" type="array">
+      <obj_property name="ElementShortName">wb_cp0_wdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wb_cp0_wdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/wb_stage0/cp0_wdata_i" type="array">
+      <obj_property name="ElementShortName">cp0_wdata_i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">cp0_wdata_i[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/memwb_reg0/mem_cp0_wdata" type="array">
+      <obj_property name="ElementShortName">mem_cp0_wdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_cp0_wdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/mem_stage0/cp0_wdata_i" type="array">
+      <obj_property name="ElementShortName">cp0_wdata_i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">cp0_wdata_i[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/MiniMIPS32_SYS_tb/SoC/minimips32/mem_stage0/cp0_wdata_o" type="array">
+      <obj_property name="ElementShortName">cp0_wdata_o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">cp0_wdata_o[31:0]</obj_property>
    </wvobject>
 </wave_config>

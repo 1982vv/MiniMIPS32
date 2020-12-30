@@ -99,8 +99,10 @@ module exe_stage (
     wire [`REG_BUS]             cp0_t;
     
     assign cp0_we_o = (cpu_rst_n ==`RST_ENABLE)? 1'b0:
+                      (exe_exccode_i == `EXC_ADEL)?1'b1:
                       (exe_aluop_i == `MINIMIPS32_MTC0)?1'b1:1'b0;
     assign cp0_wdata_o = (cpu_rst_n ==`RST_ENABLE)? `ZERO_WORD:
+                       (exe_exccode_i == `EXC_ADEL)?exe_pc_i:
                       (exe_aluop_i == `MINIMIPS32_MTC0)?exe_src2_i :`ZERO_WORD;
     assign cp0_waddr_o = (cpu_rst_n ==`RST_ENABLE)? `REG_NOP:cp0_addr_i;
     assign cp0_raddr_o = (cpu_rst_n ==`RST_ENABLE)? `REG_NOP:cp0_addr_i;
@@ -133,7 +135,7 @@ module exe_stage (
     wire [1:0]          mul_cnt;
 
     //记录试商法进行了几轮,当等于16时,表示试商法结束
-    reg  [15: 0]          cnt;
+    reg  [5: 0]          cnt;
     
     reg [65: 0]         dividend;
     reg [1: 0]          state;
@@ -147,6 +149,8 @@ module exe_stage (
 
     //dividend的低32位保存的是被除数、中间结果,第k次迭代结束的时候, dividend[k:]保存的就是当前得到的中间结
     //果 dividend32k+1]保存的就是被除数中还没有参与运算的数据, dividend高32位是每次代时的被减数
+    assign divisor2=divisor+divisor;
+    assign divisor3=divisor2+divisor;
     assign div_temp0 ={1'b000,dividend[63:32]}-{1'b000,`ZERO_WORD};//部分余数与被除数的0倍相减
     assign div_temp1={1'b000,dividend[63:32]}-{1'b0,divisor};   //部分余数与被除数的1倍相减
     assign div_temp2={1'b000,dividend[63:32]}-{1'b0,divisor2};  //部分余数与被除数的2倍相减
@@ -189,14 +193,14 @@ module exe_stage (
                     temp_op2 =div_opdata2;
                 end
                 dividend <= {`ZERO_WORD, `ZERO_WORD};
-                dividend[31: 0] <=temp_op1;
+                dividend[31:0] <=temp_op1;
                 divisor  <= temp_op2;
             end
-            end else begin                      //没有开始除法运算
-                div_ready <= `DIV_NOT_READY;
-                divres    <= {`ZERO_WORD,`ZERO_WORD};
-            end 
-         end
+    end else begin                      //没有开始除法运算
+        div_ready <= `DIV_NOT_READY;
+        divres    <= {`ZERO_WORD,`ZERO_WORD};
+    end 
+    end
             //如果进入DivByZero状态.那么直接进入 DivEnd状态除法结束.结果为0
     `DIV_BY_ZERO: begin          //DivByZero
              dividend <= {`ZERO_WORD, `ZERO_WORD};
@@ -211,7 +215,7 @@ module exe_stage (
     `DIV_ON: begin   //DivOn
             if(cnt!=6'b100010) begin //cnt不为16,示试商法还没有结束
                 if(div_temp[34]==1'b1)begin
-                //如果 divtemp 3为(minuend-n-n)结果小ddd移位,这样就将被除数还
+                //如果 divtemp[34]为1,(minuend-n-n)结果小ddd移位,这样就将被除数还
                 //没有参与运算的最高位加入到下一次选代的被减数中,同时将0追加到中间结果
                     dividend <={dividend[63:0], 2'b00};
                 end else begin
@@ -253,7 +257,7 @@ module exe_stage (
     (exe_aluop_i == `MINIMIPS32_NOR)? ~(exe_src1_i | exe_src2_i):
     (exe_aluop_i == `MINIMIPS32_XOR)? (exe_src1_i ^ exe_src2_i):
     (exe_aluop_i == `MINIMIPS32_ANDI)? (exe_src1_i & exe_src2_i):
-    (exe_aluop_i == `MINIMIPS32_XORI)? (exe_src1_i & exe_src2_i):
+    (exe_aluop_i == `MINIMIPS32_XORI)? (exe_src1_i ^ exe_src2_i):
     //11.6
     (exe_aluop_i == `MINIMIPS32_AND)? (exe_src1_i & exe_src2_i):
     (exe_aluop_i == `MINIMIPS32_ORI)? (exe_src1_i | exe_src2_i):
@@ -263,10 +267,10 @@ module exe_stage (
     assign shiftres=(cpu_rst_n == `RST_ENABLE)? `ZERO_WORD:
     //11.8
     (exe_aluop_i == `MINIMIPS32_SRL)? (exe_src2_i >> exe_src1_i) :
-    (exe_aluop_i == `MINIMIPS32_SRA)? (exe_src2_i >> exe_src1_i) :
+    (exe_aluop_i == `MINIMIPS32_SRA)? ( {32{exe_src2_i[31]}} << ( 6'd32 - {1'b0, exe_src1_i[4:0]} ) ) | ( exe_src2_i >> exe_src1_i[4:0] ) :
     (exe_aluop_i == `MINIMIPS32_SLLV)? (exe_src2_i << exe_src1_i[4:0]) :
     (exe_aluop_i == `MINIMIPS32_SRLV)? (exe_src2_i >> exe_src1_i[4:0]) :
-    (exe_aluop_i == `MINIMIPS32_SRAV)? (exe_src2_i >> exe_src1_i[4:0]) :
+    (exe_aluop_i == `MINIMIPS32_SRAV)? ({32{exe_src2_i[31]}} << ( 6'd32 - {1'b0, exe_src1_i[4:0]} ) ) | ( exe_src2_i >> exe_src1_i[4:0]) :
     //11.6
     (exe_aluop_i == `MINIMIPS32_SLL)? (exe_src2_i << exe_src1_i) : `ZERO_WORD;
     
@@ -329,10 +333,12 @@ module exe_stage (
                       (exe_alutype_i == `JUMP    ) ? ret_addr  :
                       (exe_alutype_i == `ARITH    ) ? arithres  :`ZERO_WORD;
     //判断溢出
-    wire [31:0] exe_src2_t = (exe_aluop_i == `MINIMIPS32_SUBU) ? (~exe_src2_i) +1:exe_src2_i;
+    wire [31:0] exe_src2_t = (exe_aluop_i == `MINIMIPS32_SUB) ? (~exe_src2_i) +1:exe_src2_i;
     wire [31:0] arith_tmp = exe_src1_i + exe_src2_t;
     wire ov = ((!exe_src1_i[31] && !exe_src2_t[31] && arith_tmp[31]) || (exe_src1_i[31] && exe_src2_t[31] && !arith_tmp[31]));
     
     assign exe_exccode_o =(cpu_rst_n   == `RST_ENABLE) ? `EXC_NONE:
-                          ((exe_aluop_i == `MINIMIPS32_ADD) && (ov == 1'b1)) ? `EXC_OV :exe_exccode_i;
+                          ((exe_aluop_i == `MINIMIPS32_ADD) && (ov == 1'b1)) ? `EXC_OV :
+                          ((exe_aluop_i == `MINIMIPS32_ADDI) && (ov == 1'b1)) ? `EXC_OV :
+                          ((exe_aluop_i == `MINIMIPS32_SUB) && (ov == 1'b1)) ? `EXC_OV :exe_exccode_i;
 endmodule
